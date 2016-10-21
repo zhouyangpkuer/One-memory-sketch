@@ -1,6 +1,7 @@
 #include <cstring>
 #include <algorithm>
 #include <vector>
+#include <iostream>
 #include "csketch_nonconflict.h"
 using namespace std;
 
@@ -14,6 +15,9 @@ NCSketch::NCSketch(int w, int c, int hw, int hc)
 	fun_word_f = new BOBHash[hash_word];
 	fun_counter_f = new BOBHash[hash_counter];
 	fun_counter_g = new BOBHash[hash_counter];
+	res = new lint[hash_counter];
+	//index_counter = new int[hash_counter];
+	//index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
 		fun_word_f[i].initialize(i+1);
@@ -35,7 +39,7 @@ NCSketch::~NCSketch()
 lint NCSketch::Query(const char *str)
 {
 	int temp = hash_counter;
-	lint *res = new lint[hash_counter];
+	//res = new lint[hash_counter];
 	int *index_word = new int[hash_word];
 	vector<int> used;
 	for(int i = 0; i < hash_word; i++)
@@ -68,7 +72,7 @@ lint NCSketch::Query(const char *str)
 		res[i - temp + hash_counter] = sketch[index].counter * para;
 	}
 	sort(res, res + temp);
-	int r;
+	lint r;
 	if(temp % 2 == 0)
 	{
 		r = (res[temp / 2] + res[temp / 2 - 1]) / 2;
@@ -77,7 +81,8 @@ lint NCSketch::Query(const char *str)
 	{
 		r = res[temp / 2];
 	}
-	delete [] res;
+	//cout << 3 << endl;
+	//delete [] res;
 	delete [] index_counter;
 	delete [] index_word;
 	return r;

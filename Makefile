@@ -1,4 +1,4 @@
-CPPFLAGS = -Wall -O3 -std=c++11 -w -lm
+CPPFLAGS = -Wall -O2 -std=c++11 -w -lm
 
 main: main.o cusketch.o cmsketch.o cmlsketch.o csketch.o BOBHash.o \
 	cmsketch_nonconflict.o cmlsketch_nonconflict.o cusketch_nonconflict.o csketch_nonconflict.o \
