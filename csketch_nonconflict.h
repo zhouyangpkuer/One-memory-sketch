@@ -12,8 +12,8 @@ private:
 	BOBHash *fun_word_f;
 	BOBHash *fun_counter_g;
 	lint *res;
-	//int *index_counter;
-	//int *index_word;
+	int *index_counter;
+	int *index_word;
 public:
 	NCSketch(int w, int c, int hw, int hc);
 	virtual ~NCSketch();

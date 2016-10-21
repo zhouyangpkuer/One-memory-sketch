@@ -16,8 +16,8 @@ NCSketch::NCSketch(int w, int c, int hw, int hc)
 	fun_counter_f = new BOBHash[hash_counter];
 	fun_counter_g = new BOBHash[hash_counter];
 	res = new lint[hash_counter];
-	//index_counter = new int[hash_counter];
-	//index_word = new int[hash_word];
+	index_counter = new int[hash_counter];
+	index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
 		fun_word_f[i].initialize(i+1);
@@ -40,13 +40,13 @@ lint NCSketch::Query(const char *str)
 {
 	int temp = hash_counter;
 	//res = new lint[hash_counter];
-	int *index_word = new int[hash_word];
+	//int *index_word = new int[hash_word];
 	vector<int> used;
 	for(int i = 0; i < hash_word; i++)
 	{
 		index_word[i] = fun_word_f[i].run((const unsigned char *)str, strlen(str)) % word_num;
 	}
-	int *index_counter = new int[hash_counter];
+	//int *index_counter = new int[hash_counter];
 	for(int i = 0; i < hash_counter; i++)
 	{
 		index_counter[i] = fun_counter_f[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
@@ -83,8 +83,8 @@ lint NCSketch::Query(const char *str)
 	}
 	//cout << 3 << endl;
 	//delete [] res;
-	delete [] index_counter;
-	delete [] index_word;
+	//delete [] index_counter;
+	//delete [] index_word;
 	return r;
 }
 
