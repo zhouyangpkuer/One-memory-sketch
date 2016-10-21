@@ -21,19 +21,34 @@ const char * filename_result_CML = "../result/resCML.txt";
 const char * filename_result_C = "../result/resC.txt";
 const char * filename_result_PF = "../result/resPF.txt";
 
+#define CM
+#define CU
+#define CML
+#define C
+#define PF
+
 int main()
 {
-	// filter();
-	// cout << "0" << endl;
-	NCUSketch cusketch(1 << 19, 8, 1, 3);
 
-	// cout << "1" << endl;
-
+#ifdef CM
 	NCMSketch cmsketch(1 << 19, 8, 1, 3);
+#endif
+
+#ifdef CU
+    NCUSketch cusketch(1 << 19, 8, 1, 3);
+#endif
+
+#ifdef CML
 	NCMLSketch cmlsketch(1 << 19, 8, 1, 3);
+#endif
+
+#ifdef C
 	NCSketch csketch(1 << 19, 8, 1, 3);
+#endif 
+
+#ifdef PF
 	PFSketch_cu pfsketch(1 << 19, 8, 2, 8);
-	// cout << "1.5" << endl;
+#endif
 
 	FILE *file_FlowTraffic = fopen(filename_FlowTraffic, "r");
 	FILE *file_result_CM = fopen(filename_result_CM, "w");
@@ -45,37 +60,61 @@ int main()
     char str[1000];
     int val, valCM, valCU, valCML, valC, valPF;
 
-	// cout << "2" << endl;
-
     for(int i = 0; i < N_QUERY; i++)
     {
         fscanf(file_FlowTraffic, "%s %d", str, &val);
         for(int j = 0; j < val; j++)
         {
+            #ifdef CM
             cmsketch.Insert((const char *)str);
+            #endif 
+
+            #ifdef CU
             cusketch.Insert((const char *)str);
+            #endif
+
+            #ifdef CML
             cmlsketch.Insert((const char *)str);
+            #endif
+
+            #ifdef C
             csketch.Insert((const char *)str);
+            #endif
+
+            #ifdef PF
             pfsketch.Insert((const char *)str);
+            #endif
         }
     }
     rewind(file_FlowTraffic);
 
-	// cout << "3" << endl;
-
 	for(int i = 0; i < N_QUERY; i++)
     {
         fscanf(file_FlowTraffic, "%s %d", str, &val);
+        #ifdef CM   
         valCM = cmsketch.Query((const char *)str);
-        valCU = cusketch.Query((const char *)str);
-        valCML = cmlsketch.Query((const char *)str);
-        valC = csketch.Query((const char *)str);
-        valPF = pfsketch.Query((const char *)str);
         fprintf(file_result_CM, "%d\t%d\n", val, valCM);
+        #endif
+
+        #ifdef CU
+        valCU = cusketch.Query((const char *)str);
         fprintf(file_result_CU, "%d\t%d\n", val, valCU);
+        #endif 
+
+        #ifdef CML
+        valCML = cmlsketch.Query((const char *)str);
         fprintf(file_result_CML, "%d\t%d\n", val, valCML);
+        #endif
+
+        #ifdef C
+        valC = csketch.Query((const char *)str);
         fprintf(file_result_C, "%d\t%d\n", val, valC);
+        #endif
+
+        #ifdef PF
+        valPF = pfsketch.Query((const char *)str);
         fprintf(file_result_PF, "%d\t%d\n", val, valPF);
+        #endif
     }
 
     fclose(file_FlowTraffic);

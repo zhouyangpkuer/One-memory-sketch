@@ -12,7 +12,7 @@ PFSketch_cu::PFSketch_cu(int w, int c, int hw, int hc)
 	counter_per_word = c;
 	hash_word = hw;
 	hash_counter = hc;
-
+	packages_num = 0;
 	// hash_value = new int[hc];
 
 	int base = hc / hw;
@@ -49,7 +49,7 @@ PFSketch_cu:: ~PFSketch_cu()
 
 lint PFSketch_cu::Query(const char *str)
 {
-	lint res = MAX_NUM;
+	lint res = 0;
 	int cnt_counter = 0;
 	int base, rest;
 	for(int i = 0; i < hash_word; i++)
@@ -61,7 +61,7 @@ lint PFSketch_cu::Query(const char *str)
 			res += sketch[base + rest].counter;
 		}
 	}
-	return res;
+	return res - hash_counter * packages_num / (word_num * counter_per_word * 1.0);
 }
 
 void PFSketch_cu::Insert(const char *str)
@@ -93,6 +93,7 @@ void PFSketch_cu::Insert(const char *str)
 		cnt_counter++;
 	}
 	sketch[hash_value].counter ++;
+	packages_num++;
 }
 
 void PFSketch_cu::Delete(const char *str)

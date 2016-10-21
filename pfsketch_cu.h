@@ -16,6 +16,7 @@ private:
 	BOBHash *fun_counter;
 	BOBHash *fun_word;
 	int *hashedcounter_per_word;
+	int packages_num;
 	// int *hash_value;
 public:
 	PFSketch_cu(int w, int c, int hw, int hc);
