@@ -10,7 +10,7 @@ class Sketch
 private:
 	int width;
 	int depth;
-	Counter **sketch;
+	Counter *sketch;
 public:
 	Sketch(int d, int w);
 	~Sketch();
