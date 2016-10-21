@@ -7,12 +7,23 @@
 class CUSketch: public sketch
 {	
 public:
-	CUSketch(int _word_num)
+	CUSketch(int w, int c, int hw, int hc)
 	{
-		word_num = _word_num;
-		sketch = new Counter[_word_num];
-	}
 
+	}
+	virtual void Insert(char * str)
+	{
+
+	}
+	virtual lint Query(char *str)
+	{
+
+	}
+	virtual void query(char *str)
+	{
+
+	}
+	virtual ~sketch(){};
 
 };
 
