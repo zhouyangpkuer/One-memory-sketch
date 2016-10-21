@@ -1,7 +1,7 @@
 #ifndef _PARAMS_H
 #define _PARAMS_H
 
-#define COUNTER_SIZE 6
+#define COUNTER_SIZE 16
 #define WORD_SIZE 64
 #define COUNTER_PER_WORD 32
 #define HASH_COUNTER 3

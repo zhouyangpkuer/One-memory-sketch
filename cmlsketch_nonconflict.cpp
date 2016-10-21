@@ -81,7 +81,7 @@ void NCMLSketch::Insert(const char *str)
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		c = min(c, sketch[index].counter);
 	}
-	if((unsigned long long)c < (1 << COUNTER_SZIE) - 1 && decision(c))
+	if((unsigned long long)c < (1 << COUNTER_SIZE) - 1 && decision(c))
 	{
 		for(int i = 0; i < hash_counter; i++)
 		{
