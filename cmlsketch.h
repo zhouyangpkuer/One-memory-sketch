@@ -22,3 +22,5 @@ public:
 	bool decision(int c);
 	double pointv(int c);
 };
+
+#endif // _CMLSKETCH_H
