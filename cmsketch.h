@@ -4,9 +4,9 @@
 class CMSketch : public Sketch
 {
 private:
-	BOBHash hash_counter[HASH_COUNTER];
-	BOBHash hash_word[HASH_WORD];
+	BOBHash *fun_counter;
+	BOBHash *fun_word;
 public:
-	CMSketch(int w);
+	CMSketch(int w, int c, ing hw, int hc);
 	~CMSketch();
 };
