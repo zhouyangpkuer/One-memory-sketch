@@ -8,11 +8,10 @@ struct Counter
 class Sketch
 {
 private:
-	int width;
-	int depth;
+	int word_num;
 	Counter *sketch;
 public:
-	Sketch(int d, int w);
+	Sketch(int w);
 	~Sketch();
 	virtual void Insert(char *str);
 	virtual lint Query(char *str);
