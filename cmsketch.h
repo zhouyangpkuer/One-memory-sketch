@@ -9,4 +9,4 @@ private:
 public:
 	CMSketch(int w);
 	~CMSketch();
-}
+};
