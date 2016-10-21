@@ -1,8 +1,6 @@
 #ifndef BOB_HASH_H
 #define BOB_HASH_H
 
-#include "define.h"
-
 class BOBHash
 {
 public:
