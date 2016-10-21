@@ -57,14 +57,19 @@ lint CSketch::Query(const char *str)
 		res[i] = sketch[index].counter * para;
 	}
 	sort(res, res + hash_counter);
+	lint r;
 	if(hash_counter % 2 == 0)
 	{
-		return (res[hash_counter / 2] + res[hash_counter / 2 - 1]) / 2;
+		r = (res[hash_counter / 2] + res[hash_counter / 2 - 1]) / 2;
 	}
 	else
 	{
-		return res[hash_counter / 2];
+		r = res[hash_counter / 2];
 	}
+	delete [] res;
+	delete [] index_word;
+	delete [] index_counter;
+	return r;
 }
 
 void CSketch::Insert(const char *str)
@@ -93,6 +98,9 @@ void CSketch::Insert(const char *str)
 		}
 		sketch[index].counter += para;
 	}
+
+	delete [] index_word;
+	delete [] index_counter;
 }
 
 void CSketch::Delete(const char *str)
@@ -121,4 +129,7 @@ void CSketch::Delete(const char *str)
 		}
 		sketch[index].counter -= para;
 	}
+	
+	delete [] index_word;
+	delete [] index_counter;
 }

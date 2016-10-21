@@ -43,6 +43,8 @@ lint CMSketch::Query(const char *str)
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		res = min(res, sketch[index].counter);
 	}
+	delete []index_word;
+	delete []index_counter;
 	return res;
 }
 
@@ -66,6 +68,9 @@ void CMSketch::Insert(const char *str)
 			sketch[index].counter ++;
 		}
 	}
+	
+	delete []index_word;
+	delete []index_counter;
 }
 
 void CMSketch::Delete(const char *str)
@@ -88,4 +93,6 @@ void CMSketch::Delete(const char *str)
 			sketch[index].counter --;
 		}
 	}
+	delete []index_word;
+	delete []index_counter;
 }

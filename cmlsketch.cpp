@@ -55,6 +55,9 @@ lint CMLSketch::Query(const char *str)
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		c = min(c, sketch[index].counter);
 	}
+
+	delete []index_word;
+	delete []index_counter;
 	return c <= 1 ? pointv(c) : (int)(round((1 - pointv(c + 1)) / (1 - b)));
 }
 
@@ -84,6 +87,9 @@ void CMLSketch::Insert(const char *str)
 			sketch[index].counter ++;
 		}
 	}
+	
+	delete []index_word;
+	delete []index_counter;
 }
 
 void CMLSketch::Delete(const char *str)
