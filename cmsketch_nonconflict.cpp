@@ -30,7 +30,7 @@ NCMSketch::~NCMSketch()
 
 lint NCMSketch::Query(const char *str)
 {
-	lint res = MAX_NUM;
+	unsigned long long res = MAX_NUM;
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
@@ -44,11 +44,11 @@ lint NCMSketch::Query(const char *str)
 	for(int i = 0; i < hash_counter; i++)
 	{
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
-		res = min(res, sketch[index].counter);
+		res = min(res, (unsigned long long) sketch[index].counter);
 	}
 	delete [] index_counter;
 	delete [] index_word;
-	return res;
+	return (lint)res;
 }
 
 void NCMSketch::Insert(const char *str)
@@ -69,7 +69,7 @@ void NCMSketch::Insert(const char *str)
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		if(find(used.begin(), used.end(), index) != used.end()) continue;
 		used.push_back(index);
-		if(sketch[index].counter < (1 << COUNTER_SIZE) - 1)
+		if((unsigned long long) sketch[index].counter < (1 << COUNTER_SIZE) - 1)
 		{
 			sketch[index].counter ++;
 		}
@@ -96,7 +96,7 @@ void NCMSketch::Delete(const char *str)
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		if(find(used.begin(), used.end(), index) != used.end()) continue;
 		used.push_back(index);
-		if(sketch[index].counter > 0)
+		if(sketch[index].counter != 0)
 		{
 			sketch[index].counter --;
 		}

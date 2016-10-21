@@ -41,7 +41,7 @@ double NCMLSketch::pointv(int c)
 
 lint NCMLSketch::Query(const char *str)
 {
-	lint c = MAX_NUM;
+	unsigned long long c = MAX_NUM;
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
@@ -55,7 +55,7 @@ lint NCMLSketch::Query(const char *str)
 	for(int i = 0; i < hash_counter; i++)
 	{
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
-		c = min(c, sketch[index].counter);
+		c = min(c, (unsigned long long) sketch[index].counter);
 	}
 	delete [] index_counter;
 	delete [] index_word;
@@ -81,7 +81,7 @@ void NCMLSketch::Insert(const char *str)
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		c = min(c, sketch[index].counter);
 	}
-	if(decision(c))
+	if((unsigned long long)c < (1 << COUNTER_SZIE) - 1 && decision(c))
 	{
 		for(int i = 0; i < hash_counter; i++)
 		{

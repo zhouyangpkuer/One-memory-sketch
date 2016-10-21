@@ -54,7 +54,7 @@ NCUSketch:: ~NCUSketch()
 
 lint NCUSketch::Query(const char *str)
 {
-	lint res = MAX_NUM;
+	unsigned long long res = MAX_NUM;
 	int cnt_counter = 0;
 	int base, rest;
 	for(int i = 0; i < hash_word; i++)
@@ -63,15 +63,15 @@ lint NCUSketch::Query(const char *str)
 		for(int j = 0; j < hashedcounter_per_word[i]; j++)
 		{
 			rest = fun_counter[cnt_counter++].run((const unsigned char *)str, strlen(str)) % counter_per_word;
-			res = min(sketch[base + rest].counter, res);
+			res = min((unsigned long long)sketch[base + rest].counter, res);
 		}
 	}
-	return res;
+	return (lint)res;
 }
 
 void NCUSketch::Insert(const char *str)
 {
-	lint res = MAX_NUM;
+	unsigned long long res = MAX_NUM;
 	int temp = 0;
 
 	int cnt_counter = 0;
@@ -84,17 +84,18 @@ void NCUSketch::Insert(const char *str)
 		{
 			rest = fun_counter[cnt_counter].run((const unsigned char *)str, strlen(str)) % counter_per_word;
 			
-			res = min(sketch[base + rest].counter, res);
+			res = min((unsigned long long)sketch[base + rest].counter, res);
 			hash_value[cnt_counter] = base + rest;
 
 			cnt_counter++;
 		}
 	}
-	for(int i = 0; i < hash_counter; i++)
-	{
-		if(sketch[hash_value[i]].counter == res)
-			sketch[hash_value[i]].counter ++;
-	}
+	if(res < (1 << COUNTER_SIZE) - 1)
+		for(int i = 0; i < hash_counter; i++)
+		{
+			if((unsigned long long)sketch[hash_value[i]].counter == res)
+				sketch[hash_value[i]].counter ++;
+		}
 }
 
 void NCUSketch::Delete(const char *str)
