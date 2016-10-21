@@ -1,3 +1,6 @@
+#ifndef _CMSKETCH_H
+#define _CMSKETCH_H
+
 #include "sketch.h"
 #include "BOBHash.h"
 
@@ -10,3 +13,5 @@ public:
 	CMSketch(int w, int c, ing hw, int hc);
 	~CMSketch();
 };
+
+#endif // _CMSKETCH_H
