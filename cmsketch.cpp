@@ -4,43 +4,45 @@
 
 #define MAX_NUM 100000000
 
-CMSketch::CMSketch(int w)
+CMSketch::CMSketch(int w, int c, int hw, int hc)
 {
-	sketch = new Counter[COUNTER_WORD*w];
+	sketch = new Counter[c*w];
 	word_num = w;
-	for(int i = 0; i < HASH_COUNTER; i++)
+	counter_per_word = c;
+	hash_word = hw;
+	hash_counter = hc;
+	for(int i = 0; i < hash_counter; i++)
 	{
-		hash_counter[i].initialize(i+1);
+		fun_counter[i].initialize(i+1);
 	}
-	for(int i = 0; i < HASH_WORD; i++)
+	for(int i = 0; i < hash_word; i++)
 	{
-		hash_word[i].initialize(i+1+HASH_COUNTER);
+		fun_word[i].initialize(i+1+hash_counter);
 	}
 }
 
 CMSketch::~CMSketch()
 {
-	delete [] sketch;
 }
 
 CMSketch::Query(char *str)
 {
 	lint res = MAX_NUM;
-	int index_word[HASH_WORD];
-	for(int i = 0; i < HASH_WORD; i++)
+	int index_word[hash_word];
+	for(int i = 0; i < hash_word; i++)
 	{
-		index_word[i] = hash_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
+		index_word[i] = fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
 	}
-	int index_counter[HASH_COUNTER];
-	for(int i = 0; i < HASH_COUNTER; i++)
+	int index_counter[hash_counter];
+	for(int i = 0; i < hash_counter; i++)
 	{
-		index_counter[i] = hash_counter[i].run((const unsigned char *)str, strlen(str)) % COUNTER_WORD;
+		index_counter[i] = fun_counter[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
 	}
-	for(int i = 0; i < HASH_WORD; i++)
+	for(int i = 0; i < hash_word i++)
 	{
-		for(int j = 0; j < HASH_COUNTER; j++)
+		for(int j = 0; j < hash_counter; j++)
 		{
-			res = min(res, sketch[index_word[i]*COUNTER_WORD+index_counter[j]].counter);
+			res = min(res, sketch[index_word[i]*counter_per_word+index_counter[j]].counter);
 		}
 	}
 	return res;
@@ -48,21 +50,46 @@ CMSketch::Query(char *str)
 
 CMSketch::Insert(char *str)
 {
-	int index_word[HASH_WORD];
-	for(int i = 0; i < HASH_WORD; i++)
+	int index_word[hash_word];
+	for(int i = 0; i < hash_word; i++)
 	{
-		index_word[i] = hash_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
+		index_word[i] = fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
 	}
-	int index_counter[HASH_COUNTER];
-	for(int i = 0; i < HASH_COUNTER; i++)
+	int index_counter[hash_counter];
+	for(int i = 0; i < hash_counter; i++)
 	{
-		index_counter[i] = hash_counter[i].run((const unsigned char *)str, strlen(str)) % COUNTER_WORD;
+		index_counter[i] = fun_counter[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
 	}
-	for(int i = 0; i < HASH_WORD; i++)
+	for(int i = 0; i < hash_word i++)
 	{
-		for(int j = 0; j < HASH_COUNTER; j++)
+		for(int j = 0; j < hash_counter; j++)
 		{
-			sketch[index_word[i]*COUNTER_WORD+index_counter[j]].counter++;
+			int index = index_word[i]*counter_per_word+index_counter[j];
+			if(sketch[index].counter < (1<<COUNTER_SIZE) - 1)
+				sketch[index].counter ++;
+		}
+	}
+}
+
+CMSketch::Delete(char *str)
+{
+	int index_word[hash_word];
+	for(int i = 0; i < hash_word; i++)
+	{
+		index_word[i] = fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
+	}
+	int index_counter[hash_counter];
+	for(int i = 0; i < hash_counter; i++)
+	{
+		index_counter[i] = fun_counter[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
+	}
+	for(int i = 0; i < hash_word i++)
+	{
+		for(int j = 0; j < hash_counter; j++)
+		{
+			int index = index_word[i]*counter_per_word+index_counter[j];
+			if(sketch[index].counter > 0)
+				sketch[index].counter --;
 		}
 	}
 }
