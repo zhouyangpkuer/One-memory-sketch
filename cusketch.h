@@ -1,6 +1,8 @@
 #ifndef _CUSKETCH_H
 #define _CUSKETCH_H
 
+#include <algorithm>
+#include <cstring>
 #include "params.h"
 #include "sketch.h"
 #include "BOBHash.h"

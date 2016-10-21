@@ -1,5 +1,3 @@
-#include <algorithm>
-#include <cstring>
 #include "cusketch.h"
 
 
@@ -80,5 +78,5 @@ void CUSketch::Insert(char *str)
 
 void Delete(char *str)
 {
-
+	
 }
