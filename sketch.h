@@ -14,7 +14,7 @@ private:
 	int hash_word;
 	Counter *sketch;
 public:
-	Sketch(int w, int c, int hw, int hc);
+	// Sketch(int w, int c, int hw, int hc);
 	virtual void Insert(char *str);
 	virtual lint Query(char *str);
 	virtual void Delete(char *str);
