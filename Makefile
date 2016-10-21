@@ -41,4 +41,4 @@ BOBHash.o: BOBHash.cpp BOBHash.h params.h
 	g++ -c BOBHash.cpp $(CPPFLAGS)
 
 clean:
-	rm -f *.o
+	rm -f *.o main
