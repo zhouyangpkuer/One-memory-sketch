@@ -9,11 +9,11 @@
 #include "filter.h"
 using namespace std;
 
-const char * filename_FlowTraffic = "../../../new/sourceData/insert_uni_filted.txt";
-const char * filename_result_CM = "../../result/resCM.txt";
-const char * filename_result_CU = "../../result/resCU.txt";
-const char * filename_result_CML = "../../result/resCML.txt";
-const char * filename_result_C = "../../result/resC.txt";
+const char * filename_FlowTraffic = "../insert_uni_filted.txt";
+const char * filename_result_CM = "../result/resCM.txt";
+const char * filename_result_CU = "../result/resCU.txt";
+const char * filename_result_CML = "../result/resCML.txt";
+const char * filename_result_C = "../result/resC.txt";
 
 int main()
 {
