@@ -21,41 +21,40 @@ const char * filename_result_CML = "../result/resCML.txt";
 const char * filename_result_C = "../result/resC.txt";
 const char * filename_result_PF = "../result/resPF.txt";
 
-#define CM
-#define CU
-#define CML
-#define C
+// #define CM
+// #define CU
+// #define CML
+// #define C
 #define PF
 
 int main()
 {
-
+    FILE *file_FlowTraffic = fopen(filename_FlowTraffic, "r");
+    
 #ifdef CM
-	NCMSketch cmsketch(1 << 19, 8, 1, 3);
+    FILE *file_result_CM = fopen(filename_result_CM, "w");
+    NCMSketch cmsketch(1 << 19, 8, 1, 3);
 #endif
 
 #ifdef CU
+    FILE *file_result_CU = fopen(filename_result_CU, "w");
     NCUSketch cusketch(1 << 19, 8, 1, 3);
 #endif
 
 #ifdef CML
+    FILE *file_result_CML = fopen(filename_result_CML, "w");
 	NCMLSketch cmlsketch(1 << 19, 8, 1, 3);
 #endif
 
 #ifdef C
+    FILE *file_result_C = fopen(filename_result_C, "w");
 	NCSketch csketch(1 << 19, 8, 1, 3);
 #endif 
 
 #ifdef PF
+    FILE *file_result_PF = fopen(filename_result_PF, "w");
 	PFSketch_cu pfsketch(1 << 19, 8, 2, 8);
 #endif
-
-	FILE *file_FlowTraffic = fopen(filename_FlowTraffic, "r");
-	FILE *file_result_CM = fopen(filename_result_CM, "w");
-	FILE *file_result_CU = fopen(filename_result_CU, "w");
-	FILE *file_result_CML = fopen(filename_result_CML, "w");
-	FILE *file_result_C = fopen(filename_result_C, "w");
-	FILE *file_result_PF = fopen(filename_result_PF, "w");
 
     char str[1000];
     int val, valCM, valCU, valCML, valC, valPF;
@@ -117,11 +116,25 @@ int main()
         #endif
     }
 
-    fclose(file_FlowTraffic);
+#ifdef CM
     fclose(file_result_CM);
+#endif
+
+#ifdef CU
     fclose(file_result_CU);
+#endif
+
+#ifdef CML
     fclose(file_result_CML);
+#endif
+
+#ifdef C
     fclose(file_result_C);
+#endif 
+
+#ifdef PF
     fclose(file_result_PF);
+#endif
+
 	return 0;
 }
