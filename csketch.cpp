@@ -1,6 +1,7 @@
 #include <cstring>
 #include <algorithm>
 #include "csketch.h"
+using namespace std;
 
 CSketch::CSketch(int w, int c, int hw, int hc)
 {
@@ -28,18 +29,18 @@ CSketch::~CSketch()
 
 }
 
-lint CSketch::Query(char *str)
+lint CSketch::Query(const char *str)
 {
 	lint *res = new lint[hash_counter];
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
-		index_word[i] = fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
+		index_word[i] = fun_word_f[i].run((const unsigned char *)str, strlen(str)) % word_num;
 	}
 	int *index_counter = new int[hash_counter];
 	for(int i = 0; i < hash_counter; i++)
 	{
-		index_counter[i] = fun_counter[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
+		index_counter[i] = fun_counter_f[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
 	}
 	for(int i = 0; i < hash_counter; i++)
 	{
@@ -66,17 +67,17 @@ lint CSketch::Query(char *str)
 	}
 }
 
-void CSketch::Insert(char *str)
+void CSketch::Insert(const char *str)
 {
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
-		index_word[i] = fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
+		index_word[i] = fun_word_f[i].run((const unsigned char *)str, strlen(str)) % word_num;
 	}
 	int *index_counter = new int[hash_counter];
 	for(int i = 0; i < hash_counter; i++)
 	{
-		index_counter[i] = fun_counter[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
+		index_counter[i] = fun_counter_f[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
 	}
 	for(int i = 0; i < hash_counter; i++)
 	{
@@ -94,17 +95,17 @@ void CSketch::Insert(char *str)
 	}
 }
 
-void CSketch::Delete(char *str)
+void CSketch::Delete(const char *str)
 {
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
-		index_word[i] = fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
+		index_word[i] = fun_word_f[i].run((const unsigned char *)str, strlen(str)) % word_num;
 	}
 	int *index_counter = new int[hash_counter];
 	for(int i = 0; i < hash_counter; i++)
 	{
-		index_counter[i] = fun_counter[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
+		index_counter[i] = fun_counter_f[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
 	}
 	for(int i = 0; i < hash_counter; i++)
 	{

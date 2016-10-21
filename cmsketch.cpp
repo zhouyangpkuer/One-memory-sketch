@@ -1,8 +1,6 @@
-#include <cstring>
-#include <algorithm>
 #include "cmsketch.h"
 
-#define MAX_NUM 100000000
+using namespace std;
 
 CMSketch::CMSketch(int w, int c, int hw, int hc)
 {
@@ -27,7 +25,7 @@ CMSketch::~CMSketch()
 {
 }
 
-lint CMSketch::Query(char *str)
+lint CMSketch::Query(const char *str)
 {
 	lint res = MAX_NUM;
 	int *index_word = new int[hash_word];
@@ -48,7 +46,7 @@ lint CMSketch::Query(char *str)
 	return res;
 }
 
-void CMSketch::Insert(char *str)
+void CMSketch::Insert(const char *str)
 {
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
@@ -65,12 +63,12 @@ void CMSketch::Insert(char *str)
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		if(sketch[index].counter < (1 << COUNTER_SIZE) - 1)
 		{
-			sketch[index] ++;
+			sketch[index].counter ++;
 		}
 	}
 }
 
-void CMSketch::Delete(char *str)
+void CMSketch::Delete(const char *str)
 {
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
@@ -87,7 +85,7 @@ void CMSketch::Delete(char *str)
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		if(sketch[index].counter > 0)
 		{
-			sketch[index] --;
+			sketch[index].counter --;
 		}
 	}
 }

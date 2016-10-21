@@ -3,8 +3,9 @@
 
 #include "sketch.h"
 #include "BOBHash.h"
+using namespace std;
 
-class CSketch
+class CSketch: public Sketch
 {
 private:
 	BOBHash *fun_counter_f;
@@ -13,9 +14,9 @@ private:
 public:
 	CSketch(int w, int c, int hw, int hc);
 	virtual ~CSketch();
-	virtual void Insert(char *str);
-	virtual void Query(char *str);
-	virtual void Delele(char *str);
+	virtual void Insert(const char *str);
+	virtual lint Query(const char *str);
+	virtual void Delete(const char *str);
 };
 
 #endif // _CSKETCH_H

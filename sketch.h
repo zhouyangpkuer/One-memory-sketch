@@ -1,3 +1,5 @@
+#ifndef _SKETCH_H
+#define _SKETCH_H
 #include "params.h"
 
 struct Counter
@@ -7,7 +9,7 @@ struct Counter
 
 class Sketch
 {
-private:
+protected:
 	int word_num;
 	int counter_per_word;
 	int hash_counter;
@@ -15,11 +17,13 @@ private:
 	Counter *sketch;
 public:
 	// Sketch(int w, int c, int hw, int hc);
-	virtual void Insert(char *str) = 0;
-	virtual lint Query(char *str) = 0;
-	virtual void Delete(char *str) = 0;
+	virtual void Insert(const char *str) = 0;
+	virtual lint Query(const char *str) = 0;
+	virtual void Delete(const char *str) = 0;
 	virtual ~Sketch()
 	{
 		delete[] sketch;
 	}
 };
+
+#endif // _SKETCH_H

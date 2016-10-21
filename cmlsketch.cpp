@@ -1,8 +1,5 @@
-#include <cstring>
-#include <algorithm>
-#include <cmath>
 #include "cmlsketch.h"
-
+using namespace std;
 CMLSketch::CMLSketch(int w, int c, int hw, int hc)
 {
 	word_num = w;
@@ -40,7 +37,7 @@ double CMLSketch::pointv(int c)
 	return c == 0 ? 0 : pow(b, c - 1);
 }
 
-lint CMLSketch::Query(char *str)
+lint CMLSketch::Query(const char *str)
 {
 	lint c = MAX_NUM;
 	int *index_word = new int[hash_word];
@@ -61,7 +58,7 @@ lint CMLSketch::Query(char *str)
 	return c <= 1 ? pointv(c) : (int)(round((1 - pointv(c + 1)) / (1 - b)));
 }
 
-void CMLSketch::Insert(char *str)
+void CMLSketch::Insert(const char *str)
 {
 	lint c = MAX_NUM;
 	int *index_word = new int[hash_word];
@@ -89,7 +86,7 @@ void CMLSketch::Insert(char *str)
 	}
 }
 
-void CMLSketch::Delete(char *str)
+void CMLSketch::Delete(const char *str)
 {
 	
 }
