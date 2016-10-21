@@ -6,6 +6,11 @@
 #include "csketch.h"
 #include "cusketch.h"
 #include "cmlsketch.h"
+#include "cmsketch_nonconflict.h"
+#include "csketch_nonconflict.h"
+#include "cusketch_nonconflict.h"
+#include "cmlsketch_nonconflict.h"
+#include "pfsketch_cu.h"
 #include "filter.h"
 using namespace std;
 
@@ -14,6 +19,7 @@ const char * filename_result_CM = "../result/resCM.txt";
 const char * filename_result_CU = "../result/resCU.txt";
 const char * filename_result_CML = "../result/resCML.txt";
 const char * filename_result_C = "../result/resC.txt";
+const char * filename_result_PF = "../result/resPF.txt";
 
 int main()
 {
@@ -26,6 +32,7 @@ int main()
 	NCMSketch cmsketch(1 << 19, 8, 1, 3);
 	NCMLSketch cmlsketch(1 << 19, 8, 1, 3);
 	NCSketch csketch(1 << 19, 8, 1, 3);
+	PFSketch_cu pfsketch(1 << 19, 8, 2, 8);
 	// cout << "1.5" << endl;
 
 	FILE *file_FlowTraffic = fopen(filename_FlowTraffic, "r");
@@ -33,9 +40,10 @@ int main()
 	FILE *file_result_CU = fopen(filename_result_CU, "w");
 	FILE *file_result_CML = fopen(filename_result_CML, "w");
 	FILE *file_result_C = fopen(filename_result_C, "w");
+	FILE *file_result_PF = fopen(filename_result_PF, "w");
 
     char str[1000];
-    int val, valCM, valCU, valCML, valC;
+    int val, valCM, valCU, valCML, valC, valPF;
 
 	// cout << "2" << endl;
 
@@ -46,6 +54,7 @@ int main()
         cusketch.Insert((const char *)str);
         cmlsketch.Insert((const char *)str);
         csketch.Insert((const char *)str);
+        pfsketch.Insert((const char *)str);
     }
     rewind(file_FlowTraffic);
 
@@ -58,10 +67,12 @@ int main()
         valCU = cusketch.Query((const char *)str);
         valCML = cmlsketch.Query((const char *)str);
         valC = csketch.Query((const char *)str);
+        valPF = pfsketch.Query((const char *)str);
         fprintf(file_result_CM, "%d\t%d\n", val, valCM);
         fprintf(file_result_CU, "%d\t%d\n", val, valCU);
         fprintf(file_result_CML, "%d\t%d\n", val, valCML);
         fprintf(file_result_C, "%d\t%d\n", val, valC);
+        fprintf(file_result_PF, "%d\t%d\n", val, valPF);
     }
 
     fclose(file_FlowTraffic);
@@ -69,5 +80,6 @@ int main()
     fclose(file_result_CU);
     fclose(file_result_CML);
     fclose(file_result_C);
+    fclose(file_result_PF);
 	return 0;
 }
