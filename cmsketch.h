@@ -10,8 +10,11 @@ private:
 	BOBHash *fun_counter;
 	BOBHash *fun_word;
 public:
+	virtual Insert(char *str);
+	virtual Query(char *str);
+	virtual Delete(char *str);
 	CMSketch(int w, int c, ing hw, int hc);
-	~CMSketch();
+	virtual ~CMSketch();
 };
 
 #endif // _CMSKETCH_H
