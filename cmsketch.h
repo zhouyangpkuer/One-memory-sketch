@@ -3,6 +3,7 @@
 
 #include "sketch.h"
 #include "BOBHash.h"
+#include "params.h"
 
 class CMSketch : public Sketch
 {

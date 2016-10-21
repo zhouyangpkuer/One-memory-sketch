@@ -39,7 +39,7 @@ CUSketch:: ~CUSketch()
 
 lint CUSketch::Query(char *str)
 {
-	lint res = (((lint)1) << 63);
+	lint res = MAX_NUM;
 	int cnt_counter = 0;
 	int base, rest;
 	for(int i = 0; i < hash_word; i++)
@@ -56,7 +56,7 @@ lint CUSketch::Query(char *str)
 
 void CUSketch::Insert(char *str)
 {
-	lint res = (((lint)1) << 63);
+	lint res = MAX_NUM;
 	int temp = 0;
 	int cnt_counter = 0;
 	int base, rest;
@@ -78,5 +78,5 @@ void CUSketch::Insert(char *str)
 
 void Delete(char *str)
 {
-	
+
 }

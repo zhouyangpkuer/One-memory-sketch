@@ -3,8 +3,6 @@
 #include <cmath>
 #include "cmlsketch.h"
 
-#define MAX_NUM 100000000
-
 CMLSketch::CMLSketch(int w, int c, int hw, int hc)
 {
 	word_num = w;

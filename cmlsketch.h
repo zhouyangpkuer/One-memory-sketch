@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "sketch.h"
 #include "BOBHash.h"
-
+#include "params.h"
 class CMLSketch
 {
 private:
