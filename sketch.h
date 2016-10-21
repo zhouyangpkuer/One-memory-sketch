@@ -12,8 +12,11 @@ private:
 	Counter *sketch;
 public:
 	Sketch(int w);
-	~Sketch();
 	virtual void Insert(char *str);
 	virtual lint Query(char *str);
 	virtual void Delete(char *str);
+	virtual ~Sketch()
+	{
+		delete[] sketch;
+	}
 };
