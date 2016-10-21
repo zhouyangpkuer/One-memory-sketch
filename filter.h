@@ -16,10 +16,10 @@ using namespace std;
 // vector<string> query_str;
 map<string, int> mp;
 
-const char *filename_FlowTraffic_raw = "../../../new/sourceData/insert_uni.txt";
-const char *filename_FlowTraffic_query = "../../../new/sourceData/query_uni.txt";
+const char *filename_FlowTraffic_raw = "../../../new/sourceData/insert_zipf.txt";
+const char *filename_FlowTraffic_query = "../../../new/sourceData/query_zipf.txt";
 
-const char *filename_FlowTraffic_filted = "../../../new/sourceData/insert_uni_filted.txt";
+const char *filename_FlowTraffic_filted = "../../../new/sourceData/insert_zipf_filted.txt";
 
 void filter()
 {

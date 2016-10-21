@@ -14,23 +14,37 @@
 #include "filter.h"
 using namespace std;
 
+
+
+
+#define UNIFORM
+// #define CM
+// #define CU
+// #define CML
+// #define C
+// #define PF
+
+
+
+
+#ifdef UNIFORM
 const char * filename_FlowTraffic = "../insert_uni_filted.txt";
+#else 
+const char * filename_FlowTraffic = "../insert_zipf_filted.txt";
+#endif
+
 const char * filename_result_CM = "../result/resCM.txt";
 const char * filename_result_CU = "../result/resCU.txt";
 const char * filename_result_CML = "../result/resCML.txt";
 const char * filename_result_C = "../result/resC.txt";
 const char * filename_result_PF = "../result/resPF.txt";
 
-// #define CM
-// #define CU
-// #define CML
-// #define C
-#define PF
 
 int main()
 {
+    // filter();
     FILE *file_FlowTraffic = fopen(filename_FlowTraffic, "r");
-    
+
 #ifdef CM
     FILE *file_result_CM = fopen(filename_result_CM, "w");
     NCMSketch cmsketch(1 << 19, 8, 1, 3);
@@ -129,7 +143,9 @@ int main()
 #endif
 
 #ifdef C
+    printf("1\n");
     fclose(file_result_C);
+    printf("2\n");
 #endif 
 
 #ifdef PF
