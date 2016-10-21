@@ -15,6 +15,9 @@ CSketch::CSketch(int w, int c, int hw, int hc)
 	for(int i = 0; i < hash_word; i++)
 	{
 		fun_word_f[i].initialize(i+1);
+	}
+	for(int i = 0; i < hash_counter; i++)
+	{
 		fun_counter_f[i].initialize(i+hash_word+1);
 		fun_counter_g[i].initialize(i+hash_word+hash_counter+1);
 	}
@@ -25,7 +28,7 @@ CSketch::~CSketch()
 
 }
 
-CSketch::Query(char *str)
+lint CSketch::Query(char *str)
 {
 	lint *res = new lint[hash_counter];
 	int *index_word = new int[hash_word];
@@ -63,7 +66,7 @@ CSketch::Query(char *str)
 	}
 }
 
-CSketch::Insert(char *str)
+void CSketch::Insert(char *str)
 {
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
@@ -91,7 +94,7 @@ CSketch::Insert(char *str)
 	}
 }
 
-CSketch::Delete(char *str)
+void CSketch::Delete(char *str)
 {
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)

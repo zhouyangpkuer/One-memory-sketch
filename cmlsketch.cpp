@@ -1,35 +1,50 @@
 #include <cstring>
 #include <algorithm>
-#include "cmsketch.h"
+#include <cmath>
+#include "cmlsketch.h"
 
 #define MAX_NUM 100000000
 
-CMSketch::CMSketch(int w, int c, int hw, int hc)
+CMLSketch::CMLSketch(int w, int c, int hw, int hc)
 {
-	sketch = new Counter[c*w];
 	word_num = w;
 	counter_per_word = c;
 	hash_word = hw;
 	hash_counter = hc;
-	fun_counter = new BOBHash[hash_counter];
-	fun_word = new BOBHash[hash_word];
-	for(int i = 0; i < hash_counter; i++)
+	b = 1.08;
+	sketch = new Counter[w*c];
+	fun_word = new BOBHash[hw];
+	fun_counter = new BOBHash[hc];
+	for(int i = 0; i < hw; i++)
 	{
-		fun_counter[i].initialize(i+1);
+		fun_word[i].initialize(i+1);
 	}
-	for(int i = 0; i < hash_word; i++)
+	for(int i = 0; i < hc; i++)
 	{
-		fun_word[i].initialize(i+1+hash_counter);
+		fun_counter[i].initialize(i+1+hw);
 	}
 }
 
-CMSketch::~CMSketch()
+CMLSketch::~CMLSketch()
 {
+
 }
 
-lint CMSketch::Query(char *str)
+bool CMLSketch::decision(int c)
 {
-	lint res = MAX_NUM;
+	double r = distribution(generator);
+    double lim = pow(b, -c);
+    return r < lim;
+}
+
+double CMLSketch::pointv(int c)
+{
+	return c == 0 ? 0 : pow(b, c - 1);
+}
+
+lint CMLSketch::Query(char *str)
+{
+	lint c = MAX_NUM;
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
@@ -43,13 +58,14 @@ lint CMSketch::Query(char *str)
 	for(int i = 0; i < hash_counter; i++)
 	{
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
-		res = min(res, sketch[index].counter);
+		c = min(c, sketch[index].counter);
 	}
-	return res;
+	return c <= 1 ? pointv(c) : (int)(round((1 - pointv(c + 1)) / (1 - b)));
 }
 
-void CMSketch::Insert(char *str)
+void CMLSketch::Insert(char *str)
 {
+	lint c = MAX_NUM;
 	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
@@ -63,31 +79,19 @@ void CMSketch::Insert(char *str)
 	for(int i = 0; i < hash_counter; i++)
 	{
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
-		if(sketch[index].counter < (1 << COUNTER_SIZE) - 1)
+		c = min(c, sketch[index].counter);
+	}
+	if(decision(c))
+	{
+		for(int i = 0; i < hash_counter; i++)
 		{
-			sketch[index] ++;
+			int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
+			sketch[index].counter ++;
 		}
 	}
 }
 
-void CMSketch::Delete(char *str)
+void CMLSketch::Delete(char *str)
 {
-	int *index_word = new int[hash_word];
-	for(int i = 0; i < hash_word; i++)
-	{
-		index_word[i] = fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
-	}
-	int *index_counter = new int[hash_counter];
-	for(int i = 0; i < hash_counter; i++)
-	{
-		index_counter[i] = fun_counter[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
-	}
-	for(int i = 0; i < hash_counter; i++)
-	{
-		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
-		if(sketch[index].counter > 0)
-		{
-			sketch[index] --;
-		}
-	}
+	
 }
