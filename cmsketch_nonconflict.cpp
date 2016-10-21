@@ -1,4 +1,3 @@
-#include <vector>
 #include "cmsketch_nonconflict.h"
 
 using namespace std;

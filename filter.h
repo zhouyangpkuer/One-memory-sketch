@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <algorithm>
 #include "params.h"
-// #include <iterator>
 using namespace std;
 
 // vector<string> query_str;

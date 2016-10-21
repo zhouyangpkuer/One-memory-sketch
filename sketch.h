@@ -25,5 +25,4 @@ public:
 		delete[] sketch;
 	}
 };
-
 #endif // _SKETCH_H

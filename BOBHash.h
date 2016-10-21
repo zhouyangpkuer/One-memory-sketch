@@ -1,7 +1,6 @@
 #ifndef BOB_HASH_H
 #define BOB_HASH_H
 typedef unsigned int uint;
-
 class BOBHash
 {
 public:

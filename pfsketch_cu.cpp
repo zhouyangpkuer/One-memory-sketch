@@ -13,7 +13,6 @@ PFSketch_cu::PFSketch_cu(int w, int c, int hw, int hc)
 	hash_word = hw;
 	hash_counter = hc;
 	packages_num = 0;
-	// hash_value = new int[hc];
 
 	int base = hc / hw;
 	int rest = hc - base * hw;

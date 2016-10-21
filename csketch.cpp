@@ -1,5 +1,3 @@
-#include <cstring>
-#include <algorithm>
 #include "csketch.h"
 using namespace std;
 

@@ -10,7 +10,6 @@
 #include "sketch.h"
 #include "BOBHash.h"
 #include "params.h"
-
 using namespace std;
 class CMLSketch: public Sketch
 {

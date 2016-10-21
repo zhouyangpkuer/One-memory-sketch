@@ -1,5 +1,4 @@
 #include "cmsketch.h"
-
 using namespace std;
 
 CMSketch::CMSketch(int w, int c, int hw, int hc)

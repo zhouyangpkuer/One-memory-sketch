@@ -5,6 +5,7 @@
 #include "sketch.h"
 #include "BOBHash.h"
 #include "params.h"
+#include <vector>
 
 using namespace std;
 

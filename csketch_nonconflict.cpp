@@ -1,7 +1,3 @@
-#include <cstring>
-#include <algorithm>
-#include <vector>
-#include <iostream>
 #include "csketch_nonconflict.h"
 using namespace std;
 

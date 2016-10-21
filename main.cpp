@@ -15,18 +15,12 @@
 #include "filter.h"
 using namespace std;
 
-
-
-
 // #define UNIFORM
 #define CM
 #define CU
 #define CML
 #define C
 // #define PF
-
-
-
 
 #ifdef UNIFORM
 const char * filename_FlowTraffic = "../insert_uni_filted.txt";

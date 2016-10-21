@@ -9,7 +9,6 @@
 #include <ctime>
 #include <stdio.h>
 using namespace std;
-
 class PFSketch_cu: public Sketch
 {	
 private:

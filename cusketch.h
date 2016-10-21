@@ -6,6 +6,8 @@
 #include "params.h"
 #include "sketch.h"
 #include "BOBHash.h"
+#include <iostream>
+
 using namespace std;
 
 class CUSketch: public Sketch

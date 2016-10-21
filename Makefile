@@ -7,6 +7,7 @@ main: main.o cusketch.o cmsketch.o cmlsketch.o csketch.o BOBHash.o \
 	cmsketch_nonconflict.o cmlsketch_nonconflict.o cusketch_nonconflict.o csketch_nonconflict.o	\
 	pfsketch_cu.o $(CPPFLAGS)
 
+
 main.o: main.cpp cusketch.h cmsketch.h cmlsketch.h csketch.h BOBHash.h params.h
 	g++ -c main.cpp $(CPPFLAGS) 
 

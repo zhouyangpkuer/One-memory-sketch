@@ -14,5 +14,4 @@
 
 typedef long long lint;
 
-
 #endif //_PARAMS_H

@@ -3,6 +3,10 @@
 
 #include "sketch.h"
 #include "BOBHash.h"
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <iostream>
 using namespace std;
 
 class NCSketch: public Sketch

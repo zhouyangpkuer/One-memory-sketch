@@ -1,5 +1,4 @@
 #include "BOBHash.h"
-
 #define MAX_PRIME 1229
 
 uint prime[MAX_PRIME] = {

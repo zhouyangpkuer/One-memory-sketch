@@ -7,7 +7,6 @@
 #include "params.h"
 
 using namespace std;
-
 class CMSketch : public Sketch
 {
 private:

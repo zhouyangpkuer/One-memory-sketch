@@ -1,5 +1,4 @@
 #include "cusketch_nonconflict.h"
-#include <iostream>
 using namespace std;
 NCUSketch::NCUSketch(int w, int c, int hw, int hc)
 {

@@ -1,5 +1,5 @@
-#include <vector>
 #include "cmlsketch_nonconflict.h"
+
 using namespace std;
 NCMLSketch::NCMLSketch(int w, int c, int hw, int hc)
 {

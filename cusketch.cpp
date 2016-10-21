@@ -1,5 +1,4 @@
 #include "cusketch.h"
-#include <iostream>
 using namespace std;
 CUSketch::CUSketch(int w, int c, int hw, int hc)
 {
