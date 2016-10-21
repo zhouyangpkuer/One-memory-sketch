@@ -27,7 +27,9 @@ NCSketch::NCSketch(int w, int c, int hw, int hc)
 
 NCSketch::~NCSketch()
 {
-
+	delete [] fun_word_f;
+	delete [] fun_counter_g;
+	delete [] fun_counter_f;
 }
 
 lint NCSketch::Query(const char *str)
@@ -66,14 +68,19 @@ lint NCSketch::Query(const char *str)
 		res[i - temp + hash_counter] = sketch[index].counter * para;
 	}
 	sort(res, res + temp);
+	int r;
 	if(temp % 2 == 0)
 	{
-		return (res[temp / 2] + res[temp / 2 - 1]) / 2;
+		r = (res[temp / 2] + res[temp / 2 - 1]) / 2;
 	}
 	else
 	{
-		return res[temp / 2];
+		r = res[temp / 2];
 	}
+	delete [] res;
+	delete [] index_counter;
+	delete [] index_word;
+	return r;
 }
 
 void NCSketch::Insert(const char *str)
@@ -105,6 +112,8 @@ void NCSketch::Insert(const char *str)
 		}
 		sketch[index].counter += para;
 	}
+	delete [] index_counter;
+	delete [] index_word;
 }
 
 void NCSketch::Delete(const char *str)
@@ -136,4 +145,6 @@ void NCSketch::Delete(const char *str)
 		}
 		sketch[index].counter -= para;
 	}
+	delete [] index_word;
+	delete [] index_counter;
 }

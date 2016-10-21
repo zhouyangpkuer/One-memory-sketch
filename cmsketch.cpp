@@ -23,6 +23,8 @@ CMSketch::CMSketch(int w, int c, int hw, int hc)
 
 CMSketch::~CMSketch()
 {
+	delete [] fun_counter;
+	delete [] fun_word;
 }
 
 lint CMSketch::Query(const char *str)

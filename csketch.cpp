@@ -26,7 +26,9 @@ CSketch::CSketch(int w, int c, int hw, int hc)
 
 CSketch::~CSketch()
 {
-
+	delete [] fun_counter_f;
+	delete [] fun_counter_g;
+	delete [] fun_word_f;
 }
 
 lint CSketch::Query(const char *str)

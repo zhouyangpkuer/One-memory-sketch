@@ -22,7 +22,8 @@ CMLSketch::CMLSketch(int w, int c, int hw, int hc)
 
 CMLSketch::~CMLSketch()
 {
-
+	delete [] fun_word;
+	delete [] fun_counter;
 }
 
 bool CMLSketch::decision(int c)

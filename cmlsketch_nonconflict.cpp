@@ -23,7 +23,8 @@ NCMLSketch::NCMLSketch(int w, int c, int hw, int hc)
 
 NCMLSketch::~NCMLSketch()
 {
-
+	delete [] fun_counter;
+	delete [] fun_word;
 }
 
 bool NCMLSketch::decision(int c)
@@ -56,6 +57,8 @@ lint NCMLSketch::Query(const char *str)
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		c = min(c, sketch[index].counter);
 	}
+	delete [] index_counter;
+	delete [] index_word;
 	return c <= 1 ? pointv(c) : (int)(round((1 - pointv(c + 1)) / (1 - b)));
 }
 
@@ -88,6 +91,8 @@ void NCMLSketch::Insert(const char *str)
 			sketch[index].counter ++;
 		}
 	}
+	delete [] index_counter;
+	delete [] index_word;
 }
 
 void NCMLSketch::Delete(const char *str)

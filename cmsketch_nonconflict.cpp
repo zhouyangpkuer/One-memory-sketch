@@ -24,6 +24,8 @@ NCMSketch::NCMSketch(int w, int c, int hw, int hc)
 
 NCMSketch::~NCMSketch()
 {
+	delete [] fun_word;
+	delete [] fun_counter;
 }
 
 lint NCMSketch::Query(const char *str)
@@ -44,6 +46,8 @@ lint NCMSketch::Query(const char *str)
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		res = min(res, sketch[index].counter);
 	}
+	delete [] index_counter;
+	delete [] index_word;
 	return res;
 }
 
@@ -70,6 +74,8 @@ void NCMSketch::Insert(const char *str)
 			sketch[index].counter ++;
 		}
 	}
+	delete [] index_word;
+	delete [] index_counter;
 }
 
 void NCMSketch::Delete(const char *str)
@@ -95,4 +101,6 @@ void NCMSketch::Delete(const char *str)
 			sketch[index].counter --;
 		}
 	}
+	delete [] index_word;
+	delete [] index_counter;
 }
