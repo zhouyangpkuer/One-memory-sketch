@@ -88,7 +88,7 @@ void NCMLSketch::Insert(const char *str)
 			int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 			if(find(used.begin(), used.end(), index) != used.end()) continue;
 			used.push_back(index);
-			sketch[index].counter ++;
+			if(sketch[index].counter == c) sketch[index].counter ++;
 		}
 	}
 	delete [] index_counter;
