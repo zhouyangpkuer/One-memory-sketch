@@ -1,3 +1,4 @@
+#include <vector>
 #include "cmsketch_nonconflict.h"
 
 using namespace std;
@@ -63,7 +64,7 @@ void NCMSketch::Insert(const char *str)
 	{
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		if(find(used.begin(), used.end(), index) != used.end()) continue;
-		used.append(index);
+		used.push_back(index);
 		if(sketch[index].counter < (1 << COUNTER_SIZE) - 1)
 		{
 			sketch[index].counter ++;
@@ -88,7 +89,7 @@ void NCMSketch::Delete(const char *str)
 	{
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		if(find(used.begin(), used.end(), index) != used.end()) continue;
-		used.append(index);
+		used.push_back(index);
 		if(sketch[index].counter > 0)
 		{
 			sketch[index].counter --;

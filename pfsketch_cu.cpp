@@ -58,7 +58,7 @@ lint PFSketch_cu::Query(const char *str)
 		for(int j = 0; j < hashedcounter_per_word[i]; j++)
 		{
 			rest = fun_counter[cnt_counter++].run((const unsigned char *)str, strlen(str)) % counter_per_word;
-			res += sketch[base + rest].counter
+			res += sketch[base + rest].counter;
 		}
 	}
 	return res;

@@ -1,4 +1,5 @@
-#include "cmlsketch.h"
+#include <vector>
+#include "cmlsketch_nonconflict.h"
 using namespace std;
 NCMLSketch::NCMLSketch(int w, int c, int hw, int hc)
 {
@@ -83,7 +84,7 @@ void NCMLSketch::Insert(const char *str)
 		{
 			int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 			if(find(used.begin(), used.end(), index) != used.end()) continue;
-			used.append(index);
+			used.push_back(index);
 			sketch[index].counter ++;
 		}
 	}

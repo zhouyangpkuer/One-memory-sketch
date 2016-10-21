@@ -1,5 +1,6 @@
 #include <cstring>
 #include <algorithm>
+#include <vector>
 #include "csketch_nonconflict.h"
 using namespace std;
 
@@ -52,7 +53,7 @@ lint NCSketch::Query(const char *str)
 			temp --;
 			continue;
 		}
-		used.append(index);
+		used.push_back(index);
 		int para;
 		if(fun_counter_g[i].run((const unsigned char *)str, strlen(str)) % 2 == 0)
 		{
@@ -92,7 +93,7 @@ void NCSketch::Insert(const char *str)
 	{
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		if(find(used.begin(), used.end(), index) != used.end()) continue;
-		used.append(index);
+		used.push_back(index);
 		int para;
 		if(fun_counter_g[i].run((const unsigned char *)str, strlen(str)) % 2 == 0)
 		{
@@ -123,7 +124,7 @@ void NCSketch::Delete(const char *str)
 	{
 		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		if(find(used.begin(), used.end(), index) != used.end()) continue;
-		used.append(index);
+		used.push_back(index);
 		int para;
 		if(fun_counter_g[i].run((const unsigned char *)str, strlen(str)) % 2 == 0)
 		{

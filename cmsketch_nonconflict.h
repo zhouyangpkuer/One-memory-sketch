@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class NCMSketch
+class NCMSketch : public Sketch
 {
 private:
 	BOBHash *fun_counter;
