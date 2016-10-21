@@ -28,20 +28,19 @@ CSketch::~CSketch()
 CSketch::Query(char *str)
 {
 	lint *res = new lint[hash_counter];
-	int index_word[hash_word];
+	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
 		index_word[i] = fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
 	}
-	int index_counter[hash_counter];
+	int *index_counter = new int[hash_counter];
 	for(int i = 0; i < hash_counter; i++)
 	{
 		index_counter[i] = fun_counter[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
 	}
-	int word_i = 0;
 	for(int i = 0; i < hash_counter; i++)
 	{
-		int index = index_word[word_i%hash_word] * counter_per_word + index_counter[i];
+		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		int para;
 		if(fun_counter_g[i].run((const unsigned char *)str, strlen(str)) % 2 == 0)
 		{
@@ -66,20 +65,19 @@ CSketch::Query(char *str)
 
 CSketch::Insert(char *str)
 {
-	int index_word[hash_word];
+	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
 		index_word[i] = fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
 	}
-	int index_counter[hash_counter];
+	int *index_counter = new int[hash_counter];
 	for(int i = 0; i < hash_counter; i++)
 	{
 		index_counter[i] = fun_counter[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
 	}
-	int word_i = 0;
 	for(int i = 0; i < hash_counter; i++)
 	{
-		int index = index_word[word_i%hash_word] * counter_per_word + index_counter[i];
+		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		int para;
 		if(fun_counter_g[i].run((const unsigned char *)str, strlen(str)) % 2 == 0)
 		{
@@ -95,20 +93,19 @@ CSketch::Insert(char *str)
 
 CSketch::Delete(char *str)
 {
-	int index_word[hash_word];
+	int *index_word = new int[hash_word];
 	for(int i = 0; i < hash_word; i++)
 	{
 		index_word[i] = fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num;
 	}
-	int index_counter[hash_counter];
+	int *index_counter = new int[hash_counter];
 	for(int i = 0; i < hash_counter; i++)
 	{
 		index_counter[i] = fun_counter[i].run((const unsigned char *)str, strlen(str)) % counter_per_word;
 	}
-	int word_i = 0;
 	for(int i = 0; i < hash_counter; i++)
 	{
-		int index = index_word[word_i%hash_word] * counter_per_word + index_counter[i];
+		int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
 		int para;
 		if(fun_counter_g[i].run((const unsigned char *)str, strlen(str)) % 2 == 0)
 		{
