@@ -24,8 +24,6 @@ CUSketch::CUSketch(int w, int c, int hw, int hc)
 		else
 			hashedcounter_per_word[i] = temp;
 	}
-
-
 	for(int i = 0; i < hash_counter; i++)
 	{
 		fun_counter[i].initialize(i+1);
@@ -48,7 +46,7 @@ lint CUSketch::Query(char *str)
 	int base, rest;
 	for(int i = 0; i < hash_word; i++)
 	{
-		base = (fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num) * counter_per_word;
+		base = counter_per_word * (fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num);
 		for(int j = 0; j < hashedcounter_per_word[i]; j++)
 		{
 			rest = fun_counter[cnt_counter++].run((const unsigned char *)str, strlen(str)) % counter_per_word;
@@ -66,7 +64,7 @@ void CUSketch::Insert(char *str)
 	int base, rest;
 	for(int i = 0; i < hash_word; i++)
 	{
-		base = (fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num) * counter_per_word;
+		base = counter_per_word * (fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num);
 		for(int j = 0; j < hashedcounter_per_word[i]; j++)
 		{
 			rest = fun_counter[cnt_counter++].run((const unsigned char *)str, strlen(str)) % counter_per_word;
@@ -78,4 +76,9 @@ void CUSketch::Insert(char *str)
 		}
 	}
 	sketch[temp].counter ++;
+}
+
+void Delete(char *str)
+{
+
 }
