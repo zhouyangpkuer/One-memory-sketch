@@ -19,13 +19,13 @@ int main()
 {
 	// filter();
 	// cout << "0" << endl;
-	CUSketch cusketch(1 << 14, 8, 1, 3);
+	NCUSketch cusketch(1 << 19, 8, 1, 3);
 
 	// cout << "1" << endl;
 
-	CMSketch cmsketch(1 << 14, 8, 1, 3);
-	CMLSketch cmlsketch(1 << 14, 8, 1, 3);
-	CSketch csketch(1 << 14, 8, 1, 3);
+	NCMSketch cmsketch(1 << 19, 8, 1, 3);
+	NCMLSketch cmlsketch(1 << 19, 8, 1, 3);
+	NCSketch csketch(1 << 19, 8, 1, 3);
 	// cout << "1.5" << endl;
 
 	FILE *file_FlowTraffic = fopen(filename_FlowTraffic, "r");
