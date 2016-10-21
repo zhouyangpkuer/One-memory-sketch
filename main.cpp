@@ -50,11 +50,14 @@ int main()
     for(int i = 0; i < N_QUERY; i++)
     {
         fscanf(file_FlowTraffic, "%s %d", str, &val);
-        cmsketch.Insert((const char *)str);
-        cusketch.Insert((const char *)str);
-        cmlsketch.Insert((const char *)str);
-        csketch.Insert((const char *)str);
-        pfsketch.Insert((const char *)str);
+        for(int j = 0; j < val; j++)
+        {
+            cmsketch.Insert((const char *)str);
+            cusketch.Insert((const char *)str);
+            cmlsketch.Insert((const char *)str);
+            csketch.Insert((const char *)str);
+            pfsketch.Insert((const char *)str);
+        }
     }
     rewind(file_FlowTraffic);
 
