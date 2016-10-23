@@ -88,11 +88,12 @@ void CUSketch::Insert(const char *str)
 			cnt_counter++;
 		}
 	}
-	for(int i = 0; i < hash_counter; i++)
-	{
-		if(sketch[hash_value[i]].counter == res)
-			sketch[hash_value[i]].counter ++;
-	}
+	if(res < (1 << COUNTER_SIZE) - 1)
+		for(int i = 0; i < hash_counter; i++)
+		{
+			if(sketch[hash_value[i]].counter == res)
+				sketch[hash_value[i]].counter ++;
+		}
 }
 
 void CUSketch::Delete(const char *str)

@@ -12,15 +12,18 @@
 #include "cusketch_nonconflict.h"
 #include "cmlsketch_nonconflict.h"
 #include "pfsketch_cu.h"
+#include "cusketch_plus.h"
 #include "filter.h"
 using namespace std;
 
 // #define UNIFORM
-#define CM
+
+// #define CM
 #define CU
-#define CML
-#define C
+// #define CML
+// #define C
 // #define PF
+#define CU_PLUS
 
 #ifdef UNIFORM
 const char * filename_FlowTraffic = "../insert_uni_filted.txt";
@@ -33,6 +36,7 @@ string filename_result_CU = "../result/resCU";
 string filename_result_CML = "../result/resCML";
 string filename_result_C = "../result/resC";
 string filename_result_PF = "../result/resPF";
+string filename_result_CU_plus = "../result/resCU_plus";
 
 string mkname(string str, int w, int c, int hw, int hc)
 {
@@ -63,7 +67,10 @@ int main(int argc, char ** argv)
     int c = atoi(argv[2]);
     int hw = atoi(argv[3]);
     int hc = atoi(argv[4]);
-    // cout << w << " " << c << " " << hw << " " << hc << endl;
+
+    cout << "w=" << w << " " << "c=" << c << " " 
+    << "hw=" << hw << " " << "hc=" << hc << endl;
+    
     // filter();
     FILE *file_FlowTraffic = fopen(filename_FlowTraffic, "r");
     string file_name;
@@ -105,11 +112,20 @@ int main(int argc, char ** argv)
 	PFSketch_cu pfsketch(w, c, hw, hc);
 #endif
 
-    // char str[1000];
-    int val, valCM, valCU, valCML, valC, valPF;
+#ifdef CU_PLUS
+    file_name = mkname(filename_result_CU_plus, w, c, hw, hc);
+    strcpy(str, file_name.c_str());
+    FILE *file_result_CU_plus = fopen((const char *)str, "w");
+    CUSketch_plus cusketch_plus(w, c, hw, hc);
+#endif
 
-    double sumCM = 0, sumCU = 0, sumCML = 0, sumC = 0, sumPF = 0;
-    double resCM = 0, resCU = 0, resCML = 0, resC = 0, resPF = 0;
+    // char str[1000];
+    int val, valCM, valCU, valCML, valC, valPF, valCU_plus;
+
+    double sumCM = 0, sumCU = 0, sumCML = 0, sumC = 0, sumPF = 0, sumCU_plus = 0;
+    double rsumCM = 0, rsumCU = 0, rsumCML = 0, rsumC = 0, rsumPF = 0, rsumCU_plus = 0;
+
+    double resCM = 0, resCU = 0, resCML = 0, resC = 0, resPF = 0, resCU_plus = 0;
     for(int i = 0; i < N_QUERY; i++)
     {
         fscanf(file_FlowTraffic, "%s %d", str, &val);
@@ -134,16 +150,27 @@ int main(int argc, char ** argv)
             #ifdef PF
             pfsketch.Insert((const char *)str);
             #endif
+
+            #ifdef CU_PLUS
+            cusketch_plus.Insert((const char *)str);
+            #endif
         }
     }
     rewind(file_FlowTraffic);
 
+    int zero = 0;
 	for(int i = 0; i < N_QUERY; i++)
     {
         fscanf(file_FlowTraffic, "%s %d", str, &val);
+        
+        if(val == 0)
+            zero++;
+
         #ifdef CM   
         valCM = cmsketch.Query((const char *)str);
         sumCM += fabs((double)(valCM - val)) / N_QUERY;
+        if(val != 0)
+            rsumCM += fabs((double)(valCM - val)) / val;
         
         fprintf(file_result_CM, "%d\t%d\n", val, valCM);
         #endif
@@ -151,13 +178,17 @@ int main(int argc, char ** argv)
         #ifdef CU
         valCU = cusketch.Query((const char *)str);
         sumCU += fabs((double)(valCU - val)) / N_QUERY;
-
+        if(val != 0)
+            rsumCU += fabs((double)(valCU - val)) / val;
+        
         fprintf(file_result_CU, "%d\t%d\n", val, valCU);
         #endif 
 
         #ifdef CML
         valCML = cmlsketch.Query((const char *)str);
         sumCML += fabs((double)(valCML - val)) / N_QUERY;
+        if(val != 0)
+            rsumCML += fabs((double)(valCML - val)) / val;
         
         fprintf(file_result_CML, "%d\t%d\n", val, valCML);
         #endif
@@ -165,6 +196,8 @@ int main(int argc, char ** argv)
         #ifdef C
         valC = csketch.Query((const char *)str);
         sumC += fabs((double)(valC - val)) / N_QUERY;
+        if(val != 0)
+            rsumC += fabs((double)(valC - val)) / val;
         
         fprintf(file_result_C, "%d\t%d\n", val, valC);
         #endif
@@ -172,40 +205,58 @@ int main(int argc, char ** argv)
         #ifdef PF
         valPF = pfsketch.Query((const char *)str);
         sumPF += fabs((double)(valPF - val)) / N_QUERY;
+        if(val != 0)
+            rsumPF += fabs((double)(valPF - val)) / val;
         
         fprintf(file_result_PF, "%d\t%d\n", val, valPF);
+        #endif
+
+        #ifdef CU_PLUS
+        valCU_plus = cusketch_plus.Query((const char *)str);
+        sumCU_plus += fabs((double)(valCU_plus - val)) / N_QUERY;
+        if(val != 0)
+            rsumCU_plus += fabs((double)(valCU_plus - val)) / val;
+        
+        fprintf(file_result_CU_plus, "%d\t%d\n", val, valCU_plus);
         #endif
     }
 
 #ifdef CM
     fclose(file_result_CM);
-    printf("DE_CM\t%lf\n", sumCM);
-
+    printf("DE_CM\t\t%lf\t\tRE_CM\t\t%lf\n", sumCM, rsumCM / (N_QUERY - zero));
 #endif
 
 #ifdef CU
     fclose(file_result_CU);
-    printf("DE_CU\t%lf\n", sumCU);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_CU", 15, sumCU, 15, "RE_CU", 15, rsumCU / (N_QUERY - zero));
 
 #endif
 
 #ifdef CML
     fclose(file_result_CML);
-    printf("DE_CML\t%lf\n", sumCML);
+    printf("DE_CML\t\t%lf\t\tRE_CML\t\t%lf\n", sumCML, rsumCML / (N_QUERY - zero));
 
 #endif
 
 #ifdef C
     fclose(file_result_C);
-    printf("DE_C\t%lf\n", sumC);
+    printf("DE_C\t\t%lf\t\tRE_C\t\t%lf\n", sumC, rsumC / (N_QUERY - zero));
 
 #endif 
 
 #ifdef PF
     fclose(file_result_PF);
-    printf("DE_PF\t%lf\n", sumPF);
-
+    printf("DE_PF\t\t%lf\t\tRE_PF\t\t%lf\n", sumPF, rsumPF / (N_QUERY - zero));
+ 
 #endif
 
+#ifdef CU_PLUS
+    fclose(file_result_CU_plus);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_CU_plus", 15, sumCU_plus, 15, "RE_CU_plus", 15, rsumCU_plus / (N_QUERY - zero));
+
+#endif
+    printf("\n");
 	return 0;
 }
