@@ -2,10 +2,10 @@ CPPFLAGS = -Wall -O3 -std=c++11 -w -lm
 
 main: main.o cusketch.o cmsketch.o cmlsketch.o csketch.o BOBHash.o \
 	cmsketch_nonconflict.o cmlsketch_nonconflict.o cusketch_nonconflict.o csketch_nonconflict.o \
-	pfsketch_cu.o cusketch_plus.o
+	pfsketch_cu.o cusketch_plus.o cbsketch.o support.o md5.o
 	g++ -o main main.o cusketch.o cmsketch.o cmlsketch.o csketch.o BOBHash.o \
 	cmsketch_nonconflict.o cmlsketch_nonconflict.o cusketch_nonconflict.o csketch_nonconflict.o	\
-	pfsketch_cu.o cusketch_plus.o $(CPPFLAGS)
+	pfsketch_cu.o cusketch_plus.o cbsketch.o support.o md5.o $(CPPFLAGS)
 
 
 main.o: main.cpp cusketch.h cmsketch.h cmlsketch.h csketch.h BOBHash.h params.h
@@ -40,6 +40,15 @@ pfsketch_cu.o: pfsketch_cu.cpp pfsketch_cu.h BOBHash.h params.h
 
 cusketch_plus.o: cusketch_plus.cpp cusketch_plus.h BOBHash.h params.h
 	g++ -c cusketch_plus.cpp $(CPPFLAGS)
+
+cbsketch.o:	cbsketch.cpp cbsketch.h support.h support.o params.h
+	g++ -c cbsketch.cpp $(CPPFLAGS)
+
+support.o: support.cpp support.h md5.h
+	g++ -c support.cpp $(CPPFLAGS)
+
+md5.o: md5.cpp md5.h
+	g++ -c md5.cpp $(CPPFLAGS)
 
 BOBHash.o: BOBHash.cpp BOBHash.h params.h
 	g++ -c BOBHash.cpp $(CPPFLAGS)
