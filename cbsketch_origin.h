@@ -1,5 +1,5 @@
-#ifndef _CBSKETCH_H
-#define _CBSKETCH_H
+#ifndef _CBSKETCH_ORIGINAL_H
+#define _CBSKETCH_ORIGINAL_H
 
 #include "params.h"
 #include "sketch.h"
@@ -20,10 +20,6 @@ class CBSketch: public Sketch
 private:
 	int *B1, *B2;
 	bool *sb; // status bit
-	
-	int *_B1, *_B2;
-	bool *_sb;
-
 	int cnt1, cnt2;
 	int thre1, thre2;
 	
@@ -34,7 +30,6 @@ private:
 	int *carrier_val;
 	int *carrier_est;
 	int *est_rlt;
-	int *real_rlt;
 	
 	int *num;
 	unsigned int **src;
@@ -77,5 +72,5 @@ public:
 	~CBSketch();
 };
 
-#endif //_CBSKETCH_H
+#endif //_CBSKETCH_ORIGINAL_H
 

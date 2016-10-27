@@ -1,5 +1,5 @@
-#ifndef _CBSKETCH_H
-#define _CBSKETCH_H
+#ifndef _ONEMEMCB_H
+#define _ONEMEMCB_H
 
 #include "params.h"
 #include "sketch.h"
@@ -10,20 +10,17 @@
 #include <map>
 #include <math.h>
 #include <stdlib.h>
+// #include "BOBHash.h"
 
 #define PI 3.1415926
 
 using namespace std;
 
-class CBSketch: public Sketch
+class CBSketch_one: public Sketch
 {	
 private:
 	int *B1, *B2;
 	bool *sb; // status bit
-	
-	int *_B1, *_B2;
-	bool *_sb;
-
 	int cnt1, cnt2;
 	int thre1, thre2;
 	
@@ -34,7 +31,6 @@ private:
 	int *carrier_val;
 	int *carrier_est;
 	int *est_rlt;
-	int *real_rlt;
 	
 	int *num;
 	unsigned int **src;
@@ -59,7 +55,7 @@ private:
 	map <unsigned int, unsigned int> srcEstimatedDegree;
 
 public:
-	CBSketch(int counter_num_layer1, int counter_num_layer2, 
+	CBSketch_one(int counter_num_layer1, int counter_num_layer2, 
 		int counter_size_layer1, int counter_size_layer2, int hash_num);
 	
 	virtual void Insert(const char * str);
@@ -74,8 +70,8 @@ public:
 	{
 		return est_rlt;
 	}
-	~CBSketch();
+	~CBSketch_one();
 };
 
-#endif //_CBSKETCH_H
+#endif //_ONEMEMCB_H
 

@@ -14,6 +14,7 @@ int zipf(int x) ;
 // FILETIME TimeSubstraction(FILETIME time1, FILETIME time2);
 unsigned int hash(int id, unsigned int key, unsigned int maxKey);
 unsigned int hash2(int id, unsigned int key1, unsigned int key2, unsigned int maxKey);
+unsigned int hash3(int id, unsigned int key1, unsigned int key2, unsigned int maxKey, int counter_num);
 
 #ifndef SUPPORT_H
 #define SUPPORT_H

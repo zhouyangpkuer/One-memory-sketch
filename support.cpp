@@ -4,6 +4,7 @@
 #include "support.h"
 #include <math.h>
 #include <stdio.h>
+#include "params.h"
 #include "md5.h"
 
 double RandReal(double lo, double hi)
@@ -345,6 +346,16 @@ unsigned int hash2(int id, unsigned int key1, unsigned int key2, unsigned int ma
 	hash = hash % maxKey;
 	return hash;
 }
+
+unsigned int hash3(int id, unsigned int key1, unsigned int key2, unsigned int maxKey, int counter_num)
+{
+	int counter_per_word = 60 / size1;
+	int word_num = counter_num / counter_per_word;
+	unsigned int wordID = hash(1024, key1, word_num);
+	unsigned int offset = hash2(id, key1, 1, counter_per_word);
+	return (wordID * counter_per_word + offset);
+} 
+
 
 /*unsigned hash(int id, int key, int maxKey) { // 0 <= key < maxkey
 	int hash;

@@ -1,8 +1,5 @@
-#include "cbsketch.h"
+#include "cbsketch_origin.h"
 #include <iostream>
-#include <fstream>
-#include <stdio.h>
-#include <cstring>
 using namespace std;
 
 CBSketch::CBSketch(int counter_num_layer1, int counter_num_layer2, 
@@ -19,12 +16,7 @@ CBSketch::CBSketch(int counter_num_layer1, int counter_num_layer2,
 	carrier_val = new int[cnt1];
 	carrier_est = new int[cnt1];
 	est_rlt = new int[N_QUERY];
-	real_rlt = new int[N_QUERY];
 
-	for(int i = 0; i < N_QUERY; i++)
-	{
-		real_rlt[i] = 0;
-	}
 
 	num = new int[cnt2];
 	src = new unsigned int *[cnt2];
@@ -86,25 +78,13 @@ CBSketch::CBSketch(int counter_num_layer1, int counter_num_layer2,
 	B1 = (int *) malloc(sizeof(int)*cnt1);
 	B2 = (int *) malloc(sizeof(int)*cnt2);
 	sb = (bool *) malloc(sizeof(bool)*cnt1);
-	
-	_B1 = (int *) malloc(sizeof(int)*cnt1);
-	_B2 = (int *) malloc(sizeof(int)*cnt2);
-	_sb = (bool *) malloc(sizeof(bool)*cnt1);
-
 	for (int i = 0; i < cnt1; i++) 
 	{
 		B1[i] = 0;
 		sb[i] = false;
-		_B1[i] = 0;
-		_sb[i] = false;
-			
 	}
 	for (int i = 0; i < cnt2; i++) 
-	{
 		B2[i] = 0;
-		_B2[i] = 0;
-	}
-
 }
 
 
@@ -112,7 +92,6 @@ bool CBSketch::Insert(unsigned int out, unsigned int dst, int val)
 {
 	bool result = true;
 	unsigned int hashIndex, bitIndex;
-	real_rlt[out] += val;
 
 	for (int i = 1; i <= k; i++)
 	{
@@ -148,10 +127,6 @@ void CBSketch::decode(int iteration_num, int flow_num)
 {
 	out = flow_num;
 	term = iteration_num;
-	// FILE *file_term = fopen("../result/term_result.txt", "w");
-	ofstream fout("../result/term_result.txt", ios::out);
-	fout << "term\tDE_CB\tRE_CB\n";
-	fout.flush();
 
 	/* decode the second layer */
 	int minflow = 1;
@@ -167,50 +142,6 @@ void CBSketch::decode(int iteration_num, int flow_num)
 	}
 	printf("cnt1 = %d, cnt2 = %d, my cnt = %d\n", cnt1, cnt2, mycnt);
 
-	memcpy(_B1, B1, sizeof(int) * cnt1);
-	memcpy(_B2, B2, sizeof(int) * cnt2);
-	memcpy(_sb, sb, sizeof(bool) * cnt1);
-
-//	return;
-	for(int x = 1; x <= 35; x++)
-	{
-	term = x;
-
-	memcpy(B1, _B1, sizeof(int) * cnt1);
-	memcpy(B2, _B2, sizeof(int) * cnt2);
-	memcpy(sb, _sb, sizeof(bool) * cnt1);
-
-	memset(num, 0, sizeof(int) * cnt2);
-	// printf("************%d*************\n", sizeof(num));
-	memset(num2, 0, sizeof(int) * cnt1);
-
-	for(int i = 0; i < cnt2; i++)
-	{
-	memset(src[i], 0, sizeof(unsigned int) * 100);
-	memset(uai[i], 0, sizeof(int) * 100);
-	}	
-
-	for(int i = 0; i < cnt1; i++)
-	{
-	memset(via[i], 0, sizeof(int) * k);
-	memset(oldvia[i], 0, sizeof(int) * k);
-	memset(dst[i], 0, sizeof(unsigned int) * k);
-
-	}
-
-	for(int i = 0; i < cnt1; i++)
-	{
-		memset(src2[i], 0, sizeof(unsigned int) * 50);
-		memset(uai2[i], 0, sizeof(int) * 50);
-	}	
-	for(int i = 0; i < N_QUERY; i++)
-	{
-		memset(via2[i], 0, sizeof(int) * k);
-		memset(oldvia2[i], 0, sizeof(int) * k);
-		memset(dst2[i], 0, sizeof(unsigned int) * k);
-	}
-
-
 	/************************************************************************/
 	/* For layer2 -> layer1 reconstruction                                  */
 	/************************************************************************/
@@ -225,9 +156,6 @@ void CBSketch::decode(int iteration_num, int flow_num)
 	
 			uai[bitIndex][num[bitIndex]] = 0;
 			src[bitIndex][num[bitIndex]++] = i;
-			
-			if(num[bitIndex] > 150)
-				printf("%d ", num[bitIndex]);
 			if (num[bitIndex] > 199)
 			{
 				printf("How come, overflow??\n");
@@ -236,6 +164,8 @@ void CBSketch::decode(int iteration_num, int flow_num)
 		}
 	}
 
+
+//	return;
 	int t;
 	for (t = 1; t < 100000; t++) // iteration
 	{
@@ -387,12 +317,11 @@ void CBSketch::decode(int iteration_num, int flow_num)
 						}
 					}
 				}
-				// if (carrier_val[i] != tmp)
-				// {
-				// 	printf("got one\n");
-				// 	printf("%d %d %d\n", i, carrier_val[i], tmp);
-				// }
-				
+				/*if (carrier_val[i] != tmp)
+				{
+					printf("got one\n");
+				}*/
+		//		printf("%d %d %d\n", i, carrier_val[i], tmp);
 				this->B1[i] += tmp * thre1;
 			}
 			else
@@ -417,18 +346,14 @@ void CBSketch::decode(int iteration_num, int flow_num)
 					printf("Impossible\n");
 					return;
 				}
-				// if (carrier_val[i] != tmp)
-				// {
-				// 	printf("got one\n");
-				// 	printf("%d %d %d\n", i, carrier_val[i], tmp);
-				// }
-
+				/*if (carrier_val[i] != tmp)
+				{
+					printf("got one\n");
+				}*/
 				this->B1[i] += tmp * thre1;
 			}	
 		}
 	}
-
-
 
 	/************************************************************************/
 	/*  From layer 1 -> flow                                                */
@@ -623,32 +548,6 @@ void CBSketch::decode(int iteration_num, int flow_num)
 			// this->B1[i] += tmp * thre1;
 		}	
 	}
-
-	int valCB = 0, val = 0;
-	double sumCB = 0, rsumCB = 0; 
-	int zero = 0;
-
-	for(int i = 0; i < N_QUERY; i++)
-	{
-		val = real_rlt[i];
-		valCB = est_rlt[i];
-    	sumCB += fabs((double)(valCB - val)) / N_QUERY;
-        if(val != 0)
-            rsumCB += fabs((double)(valCB - val)) / val;
-        else
-        	zero++;
-    }
-    
-    fout << x << "\t" << sumCB << "\t" << rsumCB / (N_QUERY - zero) << "\n";
-    fout.flush();
-    // sprintf(file_term, "term\t%d\tDE_CB\t%lf\tRE_CB\t%lf\n", x, sumCB, rsumCB / (N_QUERY - zero));
-    // printf("%-*s%-*lf%-*s%-*lf\n",
-        // 15, "DE_CB", 15, sumCB, 15, "RE_CB", 15, rsumCB / (N_QUERY - zero));
-  
-
-	}
-	// fout.close();
-	// fclose(file_term);
 	// free(this);
 }
 
@@ -657,14 +556,10 @@ CBSketch:: ~CBSketch()
 	free(B1);
 	free(B2);
 	free(sb);
-	free(_B1);
-	free(_B2);
-	free(_sb);
 
 	delete []carrier_val;
 	delete []carrier_est;
 	delete []est_rlt;
-	delete []real_rlt;
 
 	delete []num;
 	for(int i = 0; i < cnt2; i++)

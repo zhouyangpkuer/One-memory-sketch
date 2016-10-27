@@ -14,8 +14,8 @@
 #define N_QUERY 1000000
 #define N_INSERT 10000000
 
-#define max_term 41
-#define pm 1.00//MB
+#define max_term 21
+#define pm 1.50//MB
 #define hash_num_cb 3
 #define size1 5
 #define size2 32
