@@ -1,8 +1,9 @@
-#include "pfsketch_cu.h"
+#include "pfsketch.h"
 // #include <iostream>
-//word is chosen with random, and the one counter which is the smallest in this word adds one by itself.  
+// #define pf_cu
+//the counter across many words is chosen with random, and adds one
 using namespace std;
-PFSketch_cu::PFSketch_cu(int w, int c, int hw, int hc)
+PFSketch::PFSketch(int w, int c, int hw, int hc)
 {
 	srand(time(0)); 
 
@@ -41,13 +42,13 @@ PFSketch_cu::PFSketch_cu(int w, int c, int hw, int hc)
 	}
 }
 
-PFSketch_cu:: ~PFSketch_cu()
+PFSketch:: ~PFSketch()
 {	
 	delete []hashedcounter_per_word;
 	// delete []hash_value;
 }
 
-lint PFSketch_cu::Query(const char *str)
+lint PFSketch::Query(const char *str)
 {
 	lint res = 0;
 	int cnt_counter = 0;
@@ -64,39 +65,35 @@ lint PFSketch_cu::Query(const char *str)
 	return res - hash_counter * packages_num / (word_num * counter_per_word * 1.0);
 }
 
-void PFSketch_cu::Insert(const char *str)
+void PFSketch::Insert(const char *str)
 {
-	lint res = MAX_NUM;
+	unsigned long long res = MAX_NUM;
 	int temp = 0;
 
 	int cnt_counter = 0;
 
 	int base, rest;
-	int hash_value;
-	int word_i = rand() % hash_word;
-
-	base = counter_per_word * (fun_word[word_i].run((const unsigned char *)str, strlen(str)) % word_num);
-	
-	for(int i = 0; i < word_i; i++)
+	// int i = rand() % hash_word;
+	int counterID = rand() % hash_counter;
+	for(int i = 0; i < hash_word; i++)
 	{
-		cnt_counter += hashedcounter_per_word[i];
-	}
-
-	for(int j = 0; j < hashedcounter_per_word[word_i]; j++)
-	{
-		rest = fun_counter[cnt_counter].run((const unsigned char *)str, strlen(str)) % counter_per_word;
-		if(sketch[base + rest].counter < res)
+		base = counter_per_word * (fun_word[i].run((const unsigned char *)str, strlen(str)) % word_num);
+		for(int j = 0; j < hashedcounter_per_word[i]; j++)
 		{
-			res = sketch[base + rest].counter;
-			hash_value = base + rest;
+			if(cnt_counter == counterID)
+			{
+				rest = fun_counter[cnt_counter].run((const unsigned char *)str, strlen(str)) % counter_per_word;
+				res = (unsigned long long)sketch[base + rest].counter;
+				if(res < (1 << COUNTER_SIZE) - 1)
+					sketch[base + rest].counter = res + 1;
+			}
+			cnt_counter++;
 		}
-		cnt_counter++;
 	}
-	sketch[hash_value].counter ++;
 	packages_num++;
 }
 
-void PFSketch_cu::Delete(const char *str)
+void PFSketch::Delete(const char *str)
 {
 
 }

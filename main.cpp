@@ -4,21 +4,45 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
-#include "cmsketch.h"
-#include "csketch.h"
-#include "cusketch.h"
-#include "cmlsketch.h"
-#include "cmsketch_nonconflict.h"
-#include "csketch_nonconflict.h"
-#include "cusketch_nonconflict.h"
-#include "cmlsketch_nonconflict.h"
-#include "pfsketch_cu.h"
-#include "cusketch_plus.h"
-// #include "cbsketch.h"
-#include "cbsketch_origin.h"
-#include "onememcb.h"
+
+// #define CM
+// #define CU
+// #define CML
+#define C
+// #define PF
+// #define CU_PLUS
+// #define CB
+// #define UNIFORM
+
 #include "filter.h"
 #include "params.h"
+
+#ifdef CM
+#include "cmsketch.h"
+#include "cmsketch_nonconflict.h"
+#endif
+#ifdef C
+#include "csketch.h"
+#include "csketch_nonconflict.h"
+#endif
+#ifdef CU
+#include "cusketch.h"
+#include "cusketch_nonconflict.h"
+#include "cusketch_plus.h"
+#endif
+#ifdef CML
+#include "cmlsketch.h"
+#include "cmlsketch_nonconflict.h"
+#endif
+#ifdef PF
+#include "pfsketch_cu.h"
+#include "pfsketch.h"
+#endif
+#ifdef CB
+// #include "cbsketch_term.h"
+#include "cbsketch_origin.h"
+#include "onememcb.h"
+#endif
 
 
 using namespace std;
@@ -40,15 +64,6 @@ vector<double> vec_RECU_one;
 vector<double> vec_REPF_one;
 vector<double> vec_REC_one;
 
-// #define UNIFORM
-
-// #define CM
-// #define CU
-// #define CML
-// #define C
-// #define PF
-// #define CU_PLUS
-#define CB
 
 #ifdef UNIFORM
 const char * filename_FlowTraffic = "../insert_uni_filted.txt";
@@ -284,10 +299,17 @@ int main(int argc, char ** argv)
 #endif 
 
 #ifdef PF
-    file_name = mkname(filename_result_PF, pm, w, c, hw, hc);
+    file_name = mkname(filename_result_PF, pm, 750000, 8, hw, hc);
     strcpy(str, file_name.c_str());
     FILE *file_result_PF = fopen((const char *)str, "w");
-	PFSketch_cu pfsketch(w, c, hw, hc);
+      
+    file_name = mkname(filename_result_PF_one, pm, 750000, 8, hw, hc);
+    strcpy(str, file_name.c_str());
+    FILE *file_result_PF_one = fopen((const char *)str, "w");
+    
+    PFSketch pfsketch(750000, 8, 3, 3);
+    PFSketch onemem_pfsketch(750000, 8, 1, 3);
+
 #endif
 
 #ifdef CU_PLUS
@@ -360,10 +382,12 @@ int main(int argc, char ** argv)
 
             #ifdef PF
             pfsketch.Insert((const char *)str);
+            onemem_pfsketch.Insert((const char *)str);
             #endif
 
             #ifdef CU_PLUS
             cusketch_plus.Insert((const char *)str);
+
             #endif
 
             #ifdef CB
@@ -523,10 +547,28 @@ int main(int argc, char ** argv)
         valPF = pfsketch.Query((const char *)str);
         sumPF += fabs((double)(valPF - val)) / N_QUERY;
         if(val != 0)
-            rsumPF += fabs((double)(valPF - val)) / val;
-        
+        {
+            temp = fabs((double)(valPF - val)) / val;
+            rsumPF += temp;
+            vec_REPF.push_back(temp);
+        }
         fprintf(file_result_PF, "%d\t%d\n", val, valPF);
+
+        valPF_one = onemem_pfsketch.Query((const char *)str);
+        sumPF_one += fabs((double)(valPF_one - val)) / N_QUERY;
+        if(val != 0)
+        {    
+            temp = fabs((double)(valPF_one - val)) / val;
+            rsumPF_one += temp;
+            vec_REPF_one.push_back(temp);
+        }
+        fprintf(file_result_PF_one, "%d\t%d\n", val, valPF_one);
         #endif
+
+
+
+
+
 
         #ifdef CU_PLUS
         valCU_plus = cusketch_plus.Query((const char *)str);
@@ -575,6 +617,9 @@ int main(int argc, char ** argv)
     fclose(file_result_CM);
     printf("%-*s%-*lf%-*s%-*lf\n",
          15, "DE_CM", 15, sumCM, 15, "RE_CM", 15, rsumCM / (N_QUERY - zero));
+    fclose(file_result_CM_one);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_CM_one", 15, sumCM_one, 15, "RE_CM_one", 15, rsumCM_one / (N_QUERY - zero));
 
     FILE *RE_CM = fopen("../result/python_draw/RE/RE_CM.dat", "w");
     fprintf(RE_CM, "%s,%s,%s\n", "Relative error", "CM", "OneMemCM");
@@ -586,6 +631,9 @@ int main(int argc, char ** argv)
     fclose(file_result_CU);
     printf("%-*s%-*lf%-*s%-*lf\n",
          15, "DE_CU", 15, sumCU, 15, "RE_CU", 15, rsumCU / (N_QUERY - zero));
+    fclose(file_result_CU_one);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_CU_one", 15, sumCU_one, 15, "RE_CU_one", 15, rsumCU_one / (N_QUERY - zero));
 
     FILE *RE_CU = fopen("../result/python_draw/RE/RE_CU.dat", "w");
     fprintf(RE_CU, "%s,%s,%s\n", "Relative error", "CU", "OneMemCU");
@@ -597,6 +645,9 @@ int main(int argc, char ** argv)
     fclose(file_result_CML);
     printf("%-*s%-*lf%-*s%-*lf\n",
          15, "DE_CML", 15, sumCML, 15, "RE_CML", 15, rsumCML / (N_QUERY - zero));
+    fclose(file_result_CML_one);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_CML_one", 15, sumCML_one, 15, "RE_CML_one", 15, rsumCML_one / (N_QUERY - zero));
 
     FILE *RE_CML = fopen("../result/python_draw/RE/RE_CML.dat", "w");
     fprintf(RE_CML, "%s,%s,%s\n", "Relative error", "CML", "OneMemCML");
@@ -608,6 +659,9 @@ int main(int argc, char ** argv)
     fclose(file_result_C);
     printf("%-*s%-*lf%-*s%-*lf\n",
          15, "DE_C", 15, sumC, 15, "RE_C", 15, rsumC / (N_QUERY - zero));
+    fclose(file_result_C_one);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_C_one", 15, sumC_one, 15, "RE_C_one", 15, rsumC_one / (N_QUERY - zero));
 
     FILE *RE_C = fopen("../result/python_draw/RE/RE_C.dat", "w");
     fprintf(RE_C, "%s,%s,%s\n", "Relative error", "C", "OneMemC");
@@ -619,6 +673,13 @@ int main(int argc, char ** argv)
     fclose(file_result_PF);
     printf("%-*s%-*lf%-*s%-*lf\n",
          15, "DE_PF", 15, sumPF, 15, "RE_PF", 15, rsumPF / (N_QUERY - zero));
+    fclose(file_result_PF_one);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_PF_one", 15, sumPF_one, 15, "RE_PF_one", 15, rsumPF_one / (N_QUERY - zero));
+
+    FILE *RE_PF = fopen("../result/python_draw/RE/RE_PF.dat", "w");
+    fprintf(RE_PF, "%s,%s,%s\n", "Relative error", "PF", "OneMemPF");
+    mkDrawData(vec_REPF, vec_REPF_one, RE_PF);
 #endif
 
 #ifdef CU_PLUS

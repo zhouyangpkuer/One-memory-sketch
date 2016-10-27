@@ -2,10 +2,10 @@ CPPFLAGS = -Wall -O3 -std=c++11 -w -lm
 
 main: main.o cusketch.o cmsketch.o cmlsketch.o csketch.o BOBHash.o \
 	cmsketch_nonconflict.o cmlsketch_nonconflict.o cusketch_nonconflict.o csketch_nonconflict.o \
-	pfsketch_cu.o cusketch_plus.o cbsketch_origin.o onememcb.o support.o md5.o 
+	pfsketch_cu.o pfsketch.o cusketch_plus.o cbsketch_origin.o onememcb.o support.o md5.o 
 	g++ -o main main.o cusketch.o cmsketch.o cmlsketch.o csketch.o BOBHash.o \
 	cmsketch_nonconflict.o cmlsketch_nonconflict.o cusketch_nonconflict.o csketch_nonconflict.o	\
-	pfsketch_cu.o cusketch_plus.o cbsketch_origin.o onememcb.o support.o md5.o $(CPPFLAGS)
+	pfsketch_cu.o pfsketch.o cusketch_plus.o cbsketch_origin.o onememcb.o support.o md5.o $(CPPFLAGS)
 
 
 main.o: main.cpp cusketch.h cmsketch.h cmlsketch.h csketch.h BOBHash.h params.h
@@ -37,6 +37,9 @@ csketch_nonconflict.o: csketch_nonconflict.cpp csketch_nonconflict.h BOBHash.h p
 
 pfsketch_cu.o: pfsketch_cu.cpp pfsketch_cu.h BOBHash.h params.h
 	g++ -c pfsketch_cu.cpp $(CPPFLAGS)
+
+pfsketch.o: pfsketch.cpp pfsketch.h BOBHash.h params.h
+	g++ -c pfsketch.cpp $(CPPFLAGS)
 
 cusketch_plus.o: cusketch_plus.cpp cusketch_plus.h BOBHash.h params.h
 	g++ -c cusketch_plus.cpp $(CPPFLAGS)
