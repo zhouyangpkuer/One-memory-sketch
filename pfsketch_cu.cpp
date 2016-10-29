@@ -92,7 +92,8 @@ void PFSketch_cu::Insert(const char *str)
 		}
 		cnt_counter++;
 	}
-	sketch[hash_value].counter ++;
+	if(sketch[hash_value].counter < (1 << COUNTER_SIZE) - 1)
+		sketch[hash_value].counter ++;
 	packages_num++;
 }
 

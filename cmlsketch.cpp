@@ -86,7 +86,8 @@ void CMLSketch::Insert(const char *str)
 		for(int i = 0; i < hash_counter; i++)
 		{
 			int index = index_word[i%hash_word] * counter_per_word + index_counter[i];
-			sketch[index].counter ++;
+			if(sketch[index].counter < (1 << COUNTER_SIZE) - 1)	
+				sketch[index].counter ++;
 		}
 	}
 	

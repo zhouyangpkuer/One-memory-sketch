@@ -96,7 +96,9 @@ void CSketch::Insert(const char *str)
 		{
 			para = -1;
 		}
-		sketch[index].counter += para;
+		if((para == 1 && sketch[index].counter < (1 << (COUNTER_SIZE - 1)) - 1) || 
+			(para == -1 && sketch[index].counter > (-(1 << (COUNTER_SIZE - 1))))) 
+			sketch[index].counter += para;
 	}
 
 	delete [] index_word;
@@ -127,7 +129,9 @@ void CSketch::Delete(const char *str)
 		{
 			para = -1;
 		}
-		sketch[index].counter -= para;
+		if((para == -1 && sketch[index].counter < (1 << (COUNTER_SIZE - 1)) - 1) || 
+			(para == 1 && sketch[index].counter > (-(1 << (COUNTER_SIZE - 1))))) 
+			sketch[index].counter -= para;
 	}
 	
 	delete [] index_word;

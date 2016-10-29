@@ -4,7 +4,12 @@
 
 struct Counter
 {
-	lint counter : COUNTER_SIZE;
+	lint counter : 64;
+};
+
+struct OffCounter
+{
+	lint counter : OFF_COUNTER_SIZE;
 };
 
 class Sketch

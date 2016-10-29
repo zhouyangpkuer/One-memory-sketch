@@ -8,10 +8,11 @@
 // #define CM
 // #define CU
 // #define CML
-#define C
+// #define C
 // #define PF
 // #define CU_PLUS
 // #define CB
+#define CU_OFF
 // #define UNIFORM
 
 #include "filter.h"
@@ -43,7 +44,10 @@
 #include "cbsketch_origin.h"
 #include "onememcb.h"
 #endif
-
+#ifdef CU_OFF
+#include "cusketch_offchip.h"
+#include "cusketch_offchip_update.h"
+#endif
 
 using namespace std;
 
@@ -55,6 +59,9 @@ vector<double> vec_RECML;
 vector<double> vec_RECU;
 vector<double> vec_REPF;
 vector<double> vec_REC;
+vector<double> vec_RECU_OFF;
+vector<double> vec_RECU_OFF_UP;
+
 
 vector<double> vec_RECB_one;
 vector<double> vec_RECU_PLUS_one;
@@ -63,6 +70,9 @@ vector<double> vec_RECML_one;
 vector<double> vec_RECU_one;
 vector<double> vec_REPF_one;
 vector<double> vec_REC_one;
+vector<double> vec_RECU_OFF_one;
+vector<double> vec_RECU_OFF_UP_one;
+
 
 
 #ifdef UNIFORM
@@ -80,6 +90,8 @@ string filename_result_C = "../result/python_draw/RES/resC";
 string filename_result_PF = "../result/python_draw/RES/resPF";
 string filename_result_CU_plus = "../result/python_draw/RES/resCU_plus";
 string filename_result_CB = "../result/python_draw/RES/resCB";
+string filename_result_CU_OFF = "../result/python_draw/RES/resCU_OFF";
+string filename_result_CU_OFF_UP = "../result/python_draw/RES/resCU_OFF_UP";
 
 string filename_result_CM_one = "../result/python_draw/RES/resCM_one";
 string filename_result_CU_one = "../result/python_draw/RES/resCU_one";
@@ -88,6 +100,8 @@ string filename_result_C_one = "../result/python_draw/RES/resC_one";
 string filename_result_PF_one = "../result/python_draw/RES/resPF_one";
 string filename_result_CU_plus_one = "../result/python_draw/RES/resCU_plus_one";
 string filename_result_CB_one = "../result/python_draw/RES/resCB_one";
+string filename_result_CU_OFF_one = "../result/python_draw/RES/resCU_OFF_one";
+string filename_result_CU_OFF_UP_one = "../result/python_draw/RES/resCU_OFF_UP_one";
 
 void mkDrawData(vector<double> vec, vector<double> vec_one, FILE * file_data)
 {
@@ -225,98 +239,113 @@ int main(int argc, char ** argv)
     FILE *file_FlowTraffic = fopen(filename_FlowTraffic2, "r");
     string file_name;
     char str[1000];
-    // cout << "fasfd" << endl;
 
-    int w = (int)(pm * 1024 * 1024 * 8 / (COUNTER_SIZE * COUNTER_PER_WORD));
+
+    int w = (int)(MEMORY * 1024 * 1024 * 8 / (COUNTER_SIZE * COUNTER_PER_WORD));
     int c = COUNTER_PER_WORD;
     int hw = HASH_WORD;
     int hc = HASH_COUNTER;
     
 #ifdef CM    
 
-    file_name = mkname(filename_result_CM, pm, 750000, 8, hw, hc);
+    file_name = mkname(filename_result_CM, MEMORY, w, c, 3, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_CM = fopen((const char *)str, "w");
       
-    file_name = mkname(filename_result_CM_one, pm, 750000, 8, hw, hc);
+    file_name = mkname(filename_result_CM_one, MEMORY, w, c, 1, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_CM_one = fopen((const char *)str, "w");
     
-    NCMSketch cmsketch(750000, 8, 3, 3);
-    NCMSketch onemem_cmsketch(750000, 8, 1, 3);
+    NCMSketch cmsketch(w, c, 3, 3);
+    NCMSketch onemem_cmsketch(w, c, 1, 3);
 
 #endif
 
 #ifdef CU
-    // file_name = mkname(filename_result_CU, pm, w, c, hw, hc);
-    // strcpy(str, file_name.c_str());
-    // FILE *file_result_CU = fopen((const char *)str, "w");
-    // NCUSketch cusketch(w, c, hw, hc);
-    file_name = mkname(filename_result_CU, pm, 750000, 8, hw, hc);
+    file_name = mkname(filename_result_CU, MEMORY, w, c, 3, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_CU = fopen((const char *)str, "w");
       
-    file_name = mkname(filename_result_CU_one, pm, 750000, 8, hw, hc);
+    file_name = mkname(filename_result_CU_one, MEMORY, w, c, 1, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_CU_one = fopen((const char *)str, "w");
     
-    NCUSketch cusketch(750000, 8, 3, 3);
-    NCUSketch onemem_cusketch(750000, 8, 1, 3);
+    NCUSketch cusketch(w, c, 3, 3);
+    NCUSketch onemem_cusketch(w, c, 1, 3);
 #endif
 
 #ifdef CML
-    // file_name = mkname(filename_result_CML, pm, w, c, hw, hc);
-    // strcpy(str, file_name.c_str());
-    // FILE *file_result_CML = fopen((const char *)str, "w");
-    // NCMLSketch cmlsketch(w, c, hw, hc);
-    file_name = mkname(filename_result_CML, pm, 750000, 8, hw, hc);
+    file_name = mkname(filename_result_CML, MEMORY, w, c, 3, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_CML = fopen((const char *)str, "w");
       
-    file_name = mkname(filename_result_CML_one, pm, 750000, 8, hw, hc);
+    file_name = mkname(filename_result_CML_one, MEMORY, w, c, 1, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_CML_one = fopen((const char *)str, "w");
     
-    NCMLSketch cmlsketch(750000, 8, 3, 3);
-    NCMLSketch onemem_cmlsketch(750000, 8, 1, 3);
+    NCMLSketch cmlsketch(w, c, 3, 3);
+    NCMLSketch onemem_cmlsketch(w, c, 1, 3);
 #endif
 
-#ifdef C
- //    file_name = mkname(filename_result_C, pm, w, c, hw, hc);
- //    strcpy(str, file_name.c_str());
- //    FILE *file_result_C = fopen((const char *)str, "w");
-	// NCSketch csketch(w, c, hw, hc); 
-    file_name = mkname(filename_result_C, pm, 750000, 8, hw, hc);
+#ifdef C 
+    file_name = mkname(filename_result_C, MEMORY, w, c, 3, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_C = fopen((const char *)str, "w");
       
-    file_name = mkname(filename_result_C_one, pm, 750000, 8, hw, hc);
+    file_name = mkname(filename_result_C_one, MEMORY, w, c, 1, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_C_one = fopen((const char *)str, "w");
     
-    NCSketch csketch(750000, 8, 3, 3);
-    NCSketch onemem_csketch(750000, 8, 1, 3);
+    NCSketch csketch(w, c, 3, 3);
+    NCSketch onemem_csketch(w, c, 1, 3);
 #endif 
 
 #ifdef PF
-    file_name = mkname(filename_result_PF, pm, 750000, 8, hw, hc);
+    file_name = mkname(filename_result_PF, MEMORY, w, c, 3, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_PF = fopen((const char *)str, "w");
       
-    file_name = mkname(filename_result_PF_one, pm, 750000, 8, hw, hc);
+    file_name = mkname(filename_result_PF_one, MEMORY, w, c, 1, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_PF_one = fopen((const char *)str, "w");
     
-    PFSketch pfsketch(750000, 8, 3, 3);
-    PFSketch onemem_pfsketch(750000, 8, 1, 3);
+    PFSketch pfsketch(w, c, 3, 3);
+    PFSketch onemem_pfsketch(w, c, 1, 3);
+
+#endif
+
+#ifdef CU_OFF
+    file_name = mkname(filename_result_CU_OFF, MEMORY, w, ONCHIP_COUNTER_PER_WORD, 3, 3);
+    strcpy(str, file_name.c_str());
+    FILE *file_result_CU_OFF = fopen((const char *)str, "w");
+      
+    file_name = mkname(filename_result_CU_OFF_one, MEMORY, w, ONCHIP_COUNTER_PER_WORD, 1, 3);
+    strcpy(str, file_name.c_str());
+    FILE *file_result_CU_OFF_one = fopen((const char *)str, "w");
+    
+    CUSketch_off cusketch_off(w, ONCHIP_COUNTER_PER_WORD, 3, 3);
+    CUSketch_off onemem_cusketch_off(w, ONCHIP_COUNTER_PER_WORD, 1, 3);
+
+
+
+    file_name = mkname(filename_result_CU_OFF_UP, MEMORY, w, ONCHIP_COUNTER_PER_WORD, 3, 3);
+    strcpy(str, file_name.c_str());
+    FILE *file_result_CU_OFF_UP = fopen((const char *)str, "w");
+      
+    file_name = mkname(filename_result_CU_OFF_UP_one, MEMORY, w, ONCHIP_COUNTER_PER_WORD, 1, 3);
+    strcpy(str, file_name.c_str());
+    FILE *file_result_CU_OFF_UP_one = fopen((const char *)str, "w");
+    
+    CUSketch_off_up cusketch_off_up(w, ONCHIP_COUNTER_PER_WORD, 3, 3);
+    CUSketch_off_up onemem_cusketch_off_up(w, ONCHIP_COUNTER_PER_WORD, 1, 3);
 
 #endif
 
 #ifdef CU_PLUS
-    file_name = mkname(filename_result_CU_plus, pm, w, c, hw, hc);
+    file_name = mkname(filename_result_CU_plus, MEMORY, w, c, 3, 3);
     strcpy(str, file_name.c_str());
     FILE *file_result_CU_plus = fopen((const char *)str, "w");
-    CUSketch_plus cusketch_plus(w, c, hw, hc);
+    CUSketch_plus cusketch_plus(w, c, 3, 3);
 #endif
 
 #ifdef CB
@@ -336,19 +365,25 @@ int main(int argc, char ** argv)
     CBSketch_one *onemem_cbsketch = new CBSketch_one(cnt1, cnt2, size1, size2, hash_num_cb);
 #endif
 
-    // char str[1000];
-    // char temp[1000];
     int ip_s, ip_d;
 
-    int val, valCM, valCU, valCML, valC, valPF, valCU_plus, valCB;
-    double sumCM = 0, sumCU = 0, sumCML = 0, sumC = 0, sumPF = 0, sumCU_plus = 0, sumCB = 0;
-    double rsumCM = 0, rsumCU = 0, rsumCML = 0, rsumC = 0, rsumPF = 0, rsumCU_plus = 0, rsumCB = 0;
-    double resCM = 0, resCU = 0, resCML = 0, resC = 0, resPF = 0, resCU_plus = 0, resCB = 0;
+    int val, valCM, valCU, valCML, valC, valPF, valCU_plus, 
+        valCB, valCU_OFF, valCU_OFF_UP;
+    double sumCM = 0, sumCU = 0, sumCML = 0, sumC = 0, sumPF = 0, 
+        sumCU_plus = 0, sumCB = 0, sumCU_OFF = 0, sumCU_OFF_UP = 0;
+    double rsumCM = 0, rsumCU = 0, rsumCML = 0, rsumC = 0, rsumPF = 0,
+        rsumCU_plus = 0, rsumCB = 0, rsumCU_OFF = 0, rsumCU_OFF_UP = 0;
+    double resCM = 0, resCU = 0, resCML = 0, resC = 0, resPF = 0, 
+        resCU_plus = 0, resCB = 0, resCU_OFF = 0, resCU_OFF_UP = 0;
     
-    int valCM_one, valCU_one, valCML_one, valC_one, valPF_one, valCU_plus_one, valCB_one;
-    double sumCM_one = 0, sumCU_one = 0, sumCML_one = 0, sumC_one = 0, sumPF_one = 0, sumCU_plus_one = 0, sumCB_one = 0;
-    double rsumCM_one = 0, rsumCU_one = 0, rsumCML_one = 0, rsumC_one = 0, rsumPF_one = 0, rsumCU_plus_one = 0, rsumCB_one = 0;
-    double resCM_one = 0, resCU_one = 0, resCML_one = 0, resC_one = 0, resPF_one = 0, resCU_plus_one = 0, resCB_one = 0;
+    int valCM_one, valCU_one, valCML_one, valC_one, valPF_one, valCU_plus_one, 
+        valCB_one, valCU_OFF_one, valCU_OFF_UP_one;
+    double sumCM_one = 0, sumCU_one = 0, sumCML_one = 0, sumC_one = 0, 
+        sumPF_one = 0, sumCU_plus_one = 0, sumCB_one = 0, sumCU_OFF_one = 0, sumCU_OFF_UP_one = 0;
+    double rsumCM_one = 0, rsumCU_one = 0, rsumCML_one = 0, rsumC_one = 0, rsumPF_one = 0, 
+        rsumCU_plus_one = 0, rsumCB_one = 0, rsumCU_OFF_one = 0, rsumCU_OFF_UP_one = 0;
+    double resCM_one = 0, resCU_one = 0, resCML_one = 0, resC_one = 0, resPF_one = 0, 
+        resCU_plus_one = 0, resCB_one = 0, resCU_OFF_one = 0, resCU_OFF_UP_one = 0;
 
     double temp;
     int max_val = 0;
@@ -388,6 +423,14 @@ int main(int argc, char ** argv)
             #ifdef CU_PLUS
             cusketch_plus.Insert((const char *)str);
 
+            #endif
+
+            #ifdef CU_OFF
+            cusketch_off.Insert((const char *)str);
+            onemem_cusketch_off.Insert((const char *)str);
+
+            cusketch_off_up.Insert((const char *)str);
+            onemem_cusketch_off_up.Insert((const char *)str);
             #endif
 
             #ifdef CB
@@ -570,6 +613,59 @@ int main(int argc, char ** argv)
 
 
 
+
+
+
+        #ifdef CU_OFF
+        valCU_OFF = cusketch_off.Query((const char *)str);
+        sumCU_OFF += fabs((double)(valCU_OFF - val)) / N_QUERY;
+        if(val != 0)
+        {
+            temp = fabs((double)(valCU_OFF - val)) / val;
+            rsumCU_OFF += temp;
+            vec_RECU_OFF.push_back(temp);
+        }
+        fprintf(file_result_CU_OFF, "%d\t%d\n", val, valCU_OFF);
+
+        valCU_OFF_one = onemem_cusketch_off.Query((const char *)str);
+        sumCU_OFF_one += fabs((double)(valCU_OFF_one - val)) / N_QUERY;
+        if(val != 0)
+        {    
+            temp = fabs((double)(valCU_OFF_one - val)) / val;
+            rsumCU_OFF_one += temp;
+            vec_RECU_OFF_one.push_back(temp);
+        }
+        fprintf(file_result_CU_OFF_one, "%d\t%d\n", val, valCU_OFF_one);
+        
+
+        valCU_OFF_UP = cusketch_off_up.Query((const char *)str);
+        sumCU_OFF_UP += fabs((double)(valCU_OFF_UP - val)) / N_QUERY;
+        if(val != 0)
+        {
+            temp = fabs((double)(valCU_OFF_UP - val)) / val;
+            rsumCU_OFF_UP += temp;
+            vec_RECU_OFF_UP.push_back(temp);
+        }
+        fprintf(file_result_CU_OFF_UP, "%d\t%d\n", val, valCU_OFF_UP);
+
+        valCU_OFF_UP_one = onemem_cusketch_off_up.Query((const char *)str);
+        sumCU_OFF_UP_one += fabs((double)(valCU_OFF_UP_one - val)) / N_QUERY;
+        if(val != 0)
+        {    
+            temp = fabs((double)(valCU_OFF_UP_one - val)) / val;
+            rsumCU_OFF_UP_one += temp;
+            vec_RECU_OFF_UP_one.push_back(temp);
+        }
+        fprintf(file_result_CU_OFF_UP_one, "%d\t%d\n", val, valCU_OFF_UP_one);
+        #endif
+
+
+
+
+
+
+
+
         #ifdef CU_PLUS
         valCU_plus = cusketch_plus.Query((const char *)str);
         sumCU_plus += fabs((double)(valCU_plus - val)) / N_QUERY;
@@ -686,6 +782,32 @@ int main(int argc, char ** argv)
     fclose(file_result_CU_plus);
     printf("%-*s%-*lf%-*s%-*lf\n",
          15, "DE_CU_plus", 15, sumCU_plus, 15, "RE_CU_plus", 15, rsumCU_plus / (N_QUERY - zero));
+#endif
+
+
+#ifdef CU_OFF
+    fclose(file_result_CU_OFF);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_CU_OFF", 15, sumCU_OFF, 15, "RE_CU_OFF", 15, rsumCU_OFF / (N_QUERY - zero));
+    fclose(file_result_CU_OFF_one);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_CU_OFF_one", 15, sumCU_OFF_one, 15, "RE_CU_OFF_one", 15, rsumCU_OFF_one / (N_QUERY - zero));
+
+    FILE *RE_CU_OFF = fopen("../result/python_draw/RE/RE_CU_OFF.dat", "w");
+    fprintf(RE_CU_OFF, "%s,%s,%s\n", "Relative error", "CUoff", "OneMemCUoff");
+    mkDrawData(vec_RECU_OFF, vec_RECU_OFF_one, RE_CU_OFF);
+
+    fclose(file_result_CU_OFF_UP);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_CU_OFF_UP", 15, sumCU_OFF_UP, 15, "RE_CU_OFF_UP", 15, rsumCU_OFF_UP / (N_QUERY - zero));
+    fclose(file_result_CU_OFF_UP_one);
+    printf("%-*s%-*lf%-*s%-*lf\n",
+         15, "DE_CU_OFF_UP_one", 15, sumCU_OFF_UP_one, 15, "RE_CU_OFF_UP_one", 15, rsumCU_OFF_UP_one / (N_QUERY - zero));
+
+    FILE *RE_CU_OFF_UP = fopen("../result/python_draw/RE/RE_CU_OFF_UP.dat", "w");
+    fprintf(RE_CU_OFF_UP, "%s,%s,%s\n", "Relative error", "CUoffup", "OneMemCUoffup");
+    mkDrawData(vec_RECU_OFF_UP, vec_RECU_OFF_UP_one, RE_CU_OFF_UP);
+
 #endif
 
 
