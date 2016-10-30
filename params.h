@@ -2,7 +2,7 @@
 #define _PARAMS_H
 
 #define WORD_SIZE 64
-#define COUNTER_SIZE 16
+#define COUNTER_SIZE 32
 
 #define ON_COUNTER_SIZE 4
 #define OFF_COUNTER_SIZE 28
@@ -12,12 +12,12 @@
 
 #define HASH_COUNTER 3
 #define HASH_WORD 3
-// #define MEMORY 11.4440918
-#define MEMORY 1.50
+#define MEMORY 11.4440918
+// #define MEMORY 10.0
 
 #define MAX_NUM ((1<<COUNTER_SIZE)-1)
 
-#define N_QUERY 1000000
+#define N_QUERY 100
 #define N_INSERT 10000000
 
 #define max_term 21

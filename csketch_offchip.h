@@ -1,5 +1,5 @@
-#ifndef _CSKETCH_NONCONFLICT_H
-#define _CSKETCH_NONCONFLICT_H
+#ifndef _CSKETCH_OFFCHIP_H
+#define _CSKETCH_OFFCHIP_H
 
 #include "sketch.h"
 #include "BOBHash.h"
@@ -7,11 +7,13 @@
 #include <algorithm>
 #include <vector>
 #include <iostream>
+#include "params.h"
 using namespace std;
 
-class NCSketch: public Sketch
+class CSketch_off: public Sketch
 {
 private:
+	OffCounter *offsketch;
 	BOBHash *fun_counter_f;
 	BOBHash *fun_word_f;
 	BOBHash *fun_counter_g;
@@ -20,11 +22,11 @@ private:
 	int *index_word;
 	vector<int> used;
 public:
-	NCSketch(int w, int c, int hw, int hc);
-	virtual ~NCSketch();
+	CSketch_off(int w, int c, int hw, int hc);
+	virtual ~CSketch_off();
 	virtual void Insert(const char *str);
 	virtual lint Query(const char *str);
 	virtual void Delete(const char *str);
 };
 
-#endif // _CSKETCH_NONCONFLICT_H
+#endif // _CSKETCH_OFFCHIP_H

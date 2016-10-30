@@ -3,11 +3,11 @@ CPPFLAGS = -Wall -O3 -std=c++11 -w -lm
 main: main.o cusketch.o cmsketch.o cmlsketch.o csketch.o BOBHash.o \
 	cmsketch_nonconflict.o cmlsketch_nonconflict.o cusketch_nonconflict.o csketch_nonconflict.o \
 	pfsketch_cu.o pfsketch.o cusketch_plus.o cbsketch_origin.o onememcb.o support.o md5.o \
-	cusketch_offchip.o cusketch_offchip_update.o
+	cusketch_offchip.o cusketch_offchip_update.o cmsketch_offchip.o csketch_offchip.o
 	g++ -o main main.o cusketch.o cmsketch.o cmlsketch.o csketch.o BOBHash.o \
 	cmsketch_nonconflict.o cmlsketch_nonconflict.o cusketch_nonconflict.o csketch_nonconflict.o	\
 	pfsketch_cu.o pfsketch.o cusketch_plus.o cbsketch_origin.o onememcb.o support.o md5.o \
-	cusketch_offchip.o cusketch_offchip_update.o $(CPPFLAGS)
+	cusketch_offchip.o cusketch_offchip_update.o cmsketch_offchip.o csketch_offchip.o $(CPPFLAGS)
 
 
 main.o: main.cpp cusketch.h cmsketch.h cmlsketch.h csketch.h BOBHash.h params.h
@@ -48,6 +48,12 @@ cusketch_plus.o: cusketch_plus.cpp cusketch_plus.h BOBHash.h params.h
 
 cusketch_offchip.o: cusketch_offchip.cpp cusketch_offchip.h BOBHash.h params.h
 	g++ -c cusketch_offchip.cpp $(CPPFLAGS)
+
+cmsketch_offchip.o: cmsketch_offchip.cpp cmsketch_offchip.h BOBHash.h params.h
+	g++ -c cmsketch_offchip.cpp $(CPPFLAGS)
+
+csketch_offchip.o: csketch_offchip.cpp csketch_offchip.h BOBHash.h params.h
+	g++ -c csketch_offchip.cpp $(CPPFLAGS)
 
 cusketch_offchip_update.o: cusketch_offchip_update.cpp cusketch_offchip_update.h BOBHash.h params.h
 	g++ -c cusketch_offchip_update.cpp $(CPPFLAGS)

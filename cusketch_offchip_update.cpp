@@ -59,6 +59,7 @@ CUSketch_off_up:: ~CUSketch_off_up()
 {	
 	delete []hashedcounter_per_word;
 	delete []hash_value;
+	delete []offsketch;
 }
 
 lint CUSketch_off_up::Query(const char *str)
